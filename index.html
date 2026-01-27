@@ -199,19 +199,19 @@ Hvala!`;
       alert("Ne mogu kopirati automatski. Označi tekst i kopiraj ručno.");
     }
   });
+document.getElementById("btnWA").addEventListener("click", () => {
+  const text = document.getElementById("output").value || buildMessage();
+  setOutput(text);
 
-  document.getElementById("btnWA").addEventListener("click", () => {
-    const text = document.getElementById("output").value || buildMessage();
-    setOutput(text);
-    const encoded = encodeURIComponent(text);
-    const url = `https://wa.me/${MENTOR_BROJ}?text=${encoded}`;
-    window.open(url, "_blank");
-  });
+  const encoded = encodeURIComponent(text);
 
-  document.getElementById("btnReset").addEventListener("click", () => {
-    document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
-    ["ime","q2","q10","output"].forEach(id => document.getElementById(id).value = "");
-  });
+  // Stabilni WhatsApp link (bez resolve / 404 problema)
+  const url = `https://api.whatsapp.com/send?phone=${MENTOR_BROJ}&text=${encoded}`;
+
+  window.location.href = url;
+});
+
+
 </script>
 </body>
 </html>
