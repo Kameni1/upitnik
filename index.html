@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="hr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Upitnik za članove tima</title>
+  <style>
+    body { font-family: system-ui, Arial, sans-serif; margin: 0; background:#f6f7fb; color:#111; }
+    .wrap { max-width: 820px; margin: 0 auto; padding: 18px; }
+    .card { background:#fff; border-radius: 16px; padding: 18px; box-shadow: 0 6px 24px rgba(0,0,0,.08); }
+    h1 { margin: 0 0 6px; font-size: 22px; }
+    p { margin: 8px 0; line-height: 1.35; }
+    .q { margin: 16px 0; padding: 14px; border: 1px solid #e6e8f0; border-radius: 14px; }
+    .q h3 { margin: 0 0 10px; font-size: 16px; }
+    label { display:block; padding: 8px 10px; border-radius: 10px; cursor:pointer; }
+    label:hover { background:#f2f4ff; }
+    input[type="radio"] { margin-right: 10px; }
+    textarea, input[type="text"] {
+      width: 100%; box-sizing: border-box; padding: 10px 12px; border-radius: 12px;
+      border: 1px solid #d7dbea; font-size: 15px;
+    }
+    .row { display:flex; gap:12px; flex-wrap: wrap; }
+    .row > div { flex:1 1 220px; }
+    .actions { display:flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+    button {
+      border:0; padding: 12px 14px; border-radius: 12px; cursor:pointer;
+      font-weight: 700; font-size: 14px;
+    }
+    .primary { background:#1b5cff; color:#fff; }
+    .ghost { background:#eef2ff; color:#1b2b66; }
+    .danger { background:#ffecec; color:#8b0000; }
+    .out { margin-top: 14px; }
+    .small { font-size: 12px; color:#555; }
+    .pill { display:inline-block; font-size: 12px; background:#eef2ff; padding: 4px 8px; border-radius: 999px; }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Upitnik za članove tima</h1>
+      <p class="small">Ispuni u 2–3 minute. Na kraju dobiješ poruku spremnu za slanje mentoru preko WhatsAppa.</p>
+      <p class="small"><span class="pill">Bez pritiska</span> <span class="pill">Realno</span> <span class="pill">Kratko</span></p>
+
+      <div class="q">
+        <h3>0️⃣ Tvoje ime (opcionalno)</h3>
+        <input id="ime" type="text" placeholder="Ime i prezime ili nadimak" />
+      </div>
+
+      <div class="q">
+        <h3>1️⃣ Glavni razlog uključivanja</h3>
+        <label><input type="radio" name="q1" value="A">A – dodatni prihod</label>
+        <label><input type="radio" name="q1" value="B">B – dugoročna financijska sigurnost</label>
+        <label><input type="radio" name="q1" value="C">C – učenje i osobni razvoj</label>
+        <label><input type="radio" name="q1" value="D">D – zajednica / tim</label>
+        <label><input type="radio" name="q1" value="E">E – još istražujem</label>
+      </div>
+
+      <div class="q">
+        <h3>2️⃣ Koliko ti je važno da ovo uspije? (1–10)</h3>
+        <div class="row">
+          <div>
+            <input id="q2" type="text" inputmode="numeric" placeholder="Upiši broj 1–10" />
+            <p class="small">Primjer: 7</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="q">
+        <h3>3️⃣ Očekivani rezultat (6–12 mjeseci)</h3>
+        <label><input type="radio" name="q3" value="A">A – do 200 € mjesečno</label>
+        <label><input type="radio" name="q3" value="B">B – 200–500 €</label>
+        <label><input type="radio" name="q3" value="C">C – 500–1.000 €</label>
+        <label><input type="radio" name="q3" value="D">D – više od 1.000 €</label>
+        <label><input type="radio" name="q3" value="E">E – bez očekivanja, učim</label>
+      </div>
+
+      <div class="q">
+        <h3>4️⃣ Koliko vremena tjedno možeš realno odvojiti?</h3>
+        <label><input type="radio" name="q4" value="A">A – 1–3 sata</label>
+        <label><input type="radio" name="q4" value="B">B – 3–5 sati</label>
+        <label><input type="radio" name="q4" value="C">C – 5–10 sati</label>
+        <label><input type="radio" name="q4" value="D">D – više od 10 sati</label>
+      </div>
+
+      <div class="q">
+        <h3>5️⃣ Najčešća dostupnost</h3>
+        <label><input type="radio" name="q5" value="A">A – jutro</label>
+        <label><input type="radio" name="q5" value="B">B – popodne</label>
+        <label><input type="radio" name="q5" value="C">C – navečer</label>
+        <label><input type="radio" name="q5" value="D">D – vikendom</label>
+      </div>
+
+      <div class="q">
+        <h3>6️⃣ Komunikacija s ljudima</h3>
+        <label><input type="radio" name="q6" value="A">A – ugodno mi je</label>
+        <label><input type="radio" name="q6" value="B">B – mogu, ali s rezervom</label>
+        <label><input type="radio" name="q6" value="C">C – imam tremu</label>
+        <label><input type="radio" name="q6" value="D">D – zasad ne želim</label>
+      </div>
+
+      <div class="q">
+        <h3>7️⃣ Najveća prepreka trenutno</h3>
+        <label><input type="radio" name="q7" value="A">A – nedostatak vremena</label>
+        <label><input type="radio" name="q7" value="B">B – nejasni koraci</label>
+        <label><input type="radio" name="q7" value="C">C – manjak znanja</label>
+        <label><input type="radio" name="q7" value="D">D – samopouzdanje</label>
+        <label><input type="radio" name="q7" value="E">E – drugo</label>
+      </div>
+
+      <div class="q">
+        <h3>8️⃣ Kakvu podršku najviše želiš?</h3>
+        <label><input type="radio" name="q8" value="A">A – jasne upute (korak po korak)</label>
+        <label><input type="radio" name="q8" value="B">B – edukaciju</label>
+        <label><input type="radio" name="q8" value="C">C – motivaciju</label>
+        <label><input type="radio" name="q8" value="D">D – gotove materijale</label>
+        <label><input type="radio" name="q8" value="E">E – povremeni savjet</label>
+      </div>
+
+      <div class="q">
+        <h3>9️⃣ Što sigurno NE želiš u ovom poslu?</h3>
+        <label><input type="radio" name="q9" value="A">A – pritisak</label>
+        <label><input type="radio" name="q9" value="B">B – nagovaranje</label>
+        <label><input type="radio" name="q9" value="C">C – javne nastupe</label>
+        <label><input type="radio" name="q9" value="D">D – društvene mreže</label>
+        <label><input type="radio" name="q9" value="E">E – ništa od navedenog</label>
+      </div>
+
+      <div class="q">
+        <h3>🔟 Napomena (1 rečenica – opcionalno)</h3>
+        <textarea id="q10" rows="3" placeholder="Napiši 1 kratku rečenicu (opcionalno)"></textarea>
+      </div>
+
+      <div class="actions">
+        <button class="primary" id="btnGen">Generiraj poruku</button>
+        <button class="ghost" id="btnCopy">Kopiraj poruku</button>
+        <button class="ghost" id="btnWA">Pošalji mentoru (WhatsApp)</button>
+        <button class="danger" id="btnReset">Reset</button>
+      </div>
+
+      <div class="out">
+        <p class="small">📩 Generirana poruka (spremna za slanje):</p>
+        <textarea id="output" rows="8" readonly></textarea>
+        <p class="small">Napomena: “Pošalji mentoru” radi tako da otvori WhatsApp s pripremljenim tekstom. Mentorov broj upiši u kod (MENTOR_BROJ).</p>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // ✅ UPIŠI MENTOROV BROJ: bez +, bez razmaka (npr. 385912345678)
+  const MENTOR_BROJ = "3859XXXXXXXX"; // <-- PROMIJENI
+
+  function getRadio(name) {
+    const el = document.querySelector('input[name="'+name+'"]:checked');
+    return el ? el.value : "";
+  }
+
+  function sanitizeText(s) {
+    return (s || "").toString().trim();
+  }
+
+  function buildMessage() {
+    const ime = sanitizeText(document.getElementById("ime").value);
+    const q2 = sanitizeText(document.getElementById("q2").value);
+    const msg =
+`UPITNIK (WhatsApp)
+Ime: ${ime || "-"}
+
+1) Razlog: ${getRadio("q1") || "-"}
+2) Važnost: ${q2 || "-"} /10
+3) Očekivanje: ${getRadio("q3") || "-"}
+4) Vrijeme/tjedno: ${getRadio("q4") || "-"}
+5) Dostupnost: ${getRadio("q5") || "-"}
+6) Komunikacija: ${getRadio("q6") || "-"}
+7) Prepreka: ${getRadio("q7") || "-"}
+8) Podrška: ${getRadio("q8") || "-"}
+9) Ne želim: ${getRadio("q9") || "-"}
+10) Napomena: ${sanitizeText(document.getElementById("q10").value) || "-"}
+
+Hvala!`;
+    return msg;
+  }
+
+  function setOutput(text) {
+    document.getElementById("output").value = text;
+  }
+
+  document.getElementById("btnGen").addEventListener("click", () => {
+    setOutput(buildMessage());
+  });
+
+  document.getElementById("btnCopy").addEventListener("click", async () => {
+    const text = document.getElementById("output").value || buildMessage();
+    setOutput(text);
+    try {
+      await navigator.clipboard.writeText(text);
+      alert("Poruka kopirana ✅");
+    } catch (e) {
+      alert("Ne mogu kopirati automatski. Označi tekst i kopiraj ručno.");
+    }
+  });
+
+  document.getElementById("btnWA").addEventListener("click", () => {
+    const text = document.getElementById("output").value || buildMessage();
+    setOutput(text);
+    const encoded = encodeURIComponent(text);
+    const url = `https://wa.me/${MENTOR_BROJ}?text=${encoded}`;
+    window.open(url, "_blank");
+  });
+
+  document.getElementById("btnReset").addEventListener("click", () => {
+    document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+    ["ime","q2","q10","output"].forEach(id => document.getElementById(id).value = "");
+  });
+</script>
+</body>
+</html>
+
