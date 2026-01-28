@@ -925,6 +925,14 @@
 
     // DOM
     const quizForm = document.getElementById("quizForm");
+// reagiraj na klik bilo kojeg radio botuna
+quizForm.addEventListener("change", (e) => {
+  if (e.target && e.target.type === "radio") {
+    updatePoints();
+    updateLiveScore();
+  }
+});
+   
     const resultCard = document.getElementById("resultCard");
     const mentorSummaryEl = document.getElementById("mentorSummary");
     const statusPill = document.getElementById("statusPill");
