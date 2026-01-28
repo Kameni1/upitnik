@@ -892,7 +892,24 @@
 
     <div class="footer">© Novalus Prime – Upitnik kompatibilnosti (lokalno u pregledniku)</div>
   </div>
-                       <!-- cetvrti dio slijedi -->
+   <!-- REZULTAT + DIJELJENJE (sakriveno dok ne izračunaš) -->
+<section id="shareSection" style="display:none; margin-top:16px;">
+  <h3>Sažetak za mentora</h3>
+
+  <textarea id="summaryText" rows="10" style="width:100%; border-radius:12px; padding:12px;"
+    readonly></textarea>
+
+  <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+    <button type="button" id="btnCopy">📋 Kopiraj sažetak</button>
+    <button type="button" id="btnWhatsApp">🟢 WhatsApp</button>
+    <button type="button" id="btnTelegram">🔵 Telegram</button>
+  </div>
+
+  <p style="opacity:.8; margin-top:8px;">
+    Savjet: Ako WhatsApp/Telegram ne otvori share na računalu, klikni “Kopiraj sažetak” pa zalijepi u poruku.
+  </p>
+</section>
+                 
 
 
   <script>
@@ -1006,6 +1023,7 @@ quizForm.addEventListener("change", (e) => {
     function updateLiveScore(){
       const s = calcScoreLive();
       liveScoreEl.textContent = String(s);
+      showShareButtons(s);
       return s;
     }
 
