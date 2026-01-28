@@ -36,6 +36,98 @@
     .resultBox { white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; font-size: 13px; background:#0b1020; color:#d9e2ff; padding: 14px; border-radius: 12px; }
     .small { font-size: 12px; }
     a { color: #1b46ff; }
+    <style>
+  /* JARKA PODLOGA + “premium” osjećaj */
+  body{
+    margin:0;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    background:
+      radial-gradient(1200px 800px at 10% 10%, rgba(255, 215, 0, .35), transparent 55%),
+      radial-gradient(900px 700px at 90% 20%, rgba(0, 255, 255, .18), transparent 55%),
+      radial-gradient(900px 700px at 30% 90%, rgba(255, 0, 128, .18), transparent 55%),
+      linear-gradient(135deg, #0b1020 0%, #111a33 35%, #1a1140 70%, #0c1b2f 100%);
+    min-height:100vh;
+  }
+
+  /* Kartica da sadržaj “sjedi” čisto */
+  .card{
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.12);
+    backdrop-filter: blur(10px);
+    border-radius: 18px;
+    box-shadow: 0 18px 45px rgba(0,0,0,.35);
+    padding: 18px;
+  }
+
+  /* 3D BUTTON baza */
+  .btn{
+    border: 0;
+    cursor: pointer;
+    border-radius: 14px;
+    padding: 12px 16px;
+    font-weight: 800;
+    letter-spacing: .2px;
+    text-transform: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    user-select: none;
+
+    /* 3D efekt */
+    transform: translateY(0);
+    box-shadow:
+      0 10px 0 rgba(0,0,0,.35),
+      0 18px 35px rgba(0,0,0,.35);
+    transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+  }
+
+  .btn:hover{ filter: brightness(1.06); }
+  .btn:active{
+    transform: translateY(7px);
+    box-shadow:
+      0 3px 0 rgba(0,0,0,.35),
+      0 10px 18px rgba(0,0,0,.35);
+  }
+
+  /* “ZLATNI” (kandidat prolazi prag) */
+  .btn-gold{
+    color: #1b1400;
+    background: linear-gradient(180deg, #fff1a8 0%, #ffd24d 40%, #f5b300 100%);
+    border: 1px solid rgba(255,255,255,.35);
+  }
+
+  /* “ZELENI” (ne prolazi prag) — ti si rekao “nezrelo” */
+  .btn-green{
+    color: #041a07;
+    background: linear-gradient(180deg, #c7ffb6 0%, #52e07f 45%, #16b45c 100%);
+    border: 1px solid rgba(255,255,255,.30);
+  }
+
+  /* Neutralni/sekundarni gumb */
+  .btn-ghost{
+    color: rgba(255,255,255,.92);
+    background: linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.08));
+    border: 1px solid rgba(255,255,255,.18);
+  }
+
+  .btn-row{
+    display:flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+  }
+
+  /* Sažetak / pre */
+  pre, .summary-box{
+    background: rgba(0,0,0,.45);
+    color: rgba(255,255,255,.92);
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 14px;
+    padding: 14px;
+    overflow:auto;
+  }
+</style>
+
   </style>
 </head>
 <body>
