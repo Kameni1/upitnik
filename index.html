@@ -1,133 +1,882 @@
-<script>
-  // ===== POSTAVKE =====
-  const PASS_THRESHOLD = 120;
+<!doctype html>
+<html lang="hr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Novalus Prime – Upitnik kompatibilnosti</title>
 
-  const ranges = [
-    { min: 151, max: 220, label: "151–220: vrlo dobra kompatibilnost", rec: "Preporuka: uključivanje uz mentorstvo i konkretne korake." },
-    { min: 81,  max: 150, label: "81–150: potencijal postoji",       rec: "Preporuka: sporiji tempo, jasna očekivanja, dogovor oko plana." },
-    { min: 0,   max: 80,  label: "0–80: trenutno nezrelo",           rec: "Preporuka: edukacija i pauza; bez pritiska." }
-  ];
+  <style>
+    :root{
+      --bg0:#070a14;
+      --bg1:#0b1020;
+      --bg2:#111a33;
+      --bg3:#1a1140;
+      --card: rgba(255,255,255,.10);
+      --card2: rgba(255,255,255,.08);
+      --stroke: rgba(255,255,255,.16);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.70);
+      --shadow: 0 18px 55px rgba(0,0,0,.42);
+      --radius: 20px;
 
-  const titles = {
-    q1: "MLM stav",
-    q2: "Nagrade/prihodi ovise o",
-    q3: "Vrijeme tjedno koje može izdvojiti",
-    q4: "Učenje vještina",
-    q5: "Dugoročni rezultati",
-    q6: "Važnost jasnog objašnjenja",
-    q7: "Spremnost na plan 30 dana",
-    q8: "Razgovor s ljudima",
-    q9: "Financijski okvir",
-    i10: "Što dalje želi",
-    i11: "Tombola / webinar",
-    i12: "Preporuka druge osobe",
-    i13: "Model gradnje tima"
-  };
+      --goldA:#fff1a8;
+      --goldB:#ffd24d;
+      --goldC:#f5b300;
 
-  // ===== DOM =====
-  const quizForm = document.getElementById("quizForm");
-  const resultCard = document.getElementById("resultCard");
-  const mentorSummaryEl = document.getElementById("mentorSummary");
-  const statusPill = document.getElementById("statusPill");
-
-  const mentorIdEl = document.getElementById("mentorId");
-  const mentorEmailEl = document.getElementById("mentorEmail");
-  const mentorPhoneEl = document.getElementById("mentorPhone");
-  const candidateNameEl = document.getElementById("candidateName");
-  const candidateNoteEl = document.getElementById("candidateNote");
-  const inviteLinkEl = document.getElementById("inviteLink");
-
-  const scoreLine = document.getElementById("scoreLine");
-  const rangeLine = document.getElementById("rangeLine");
-  const passLine  = document.getElementById("passLine");
-
-  const btnReset = document.getElementById("btnReset");
-  const btnCopy  = document.getElementById("btnCopy");
-  const btnEmail = document.getElementById("btnEmail");
-  const btnWA    = document.getElementById("btnWA");
-  const btnTG    = document.getElementById("btnTG");
-
-  // ===== HELPERS =====
-  function safeText(v){ return (v ?? "").toString().trim(); }
-  function candidateName(){ return safeText(candidateNameEl.value) || "Kandidat"; }
-
-  function buildInviteLink(){
-    const mentorId = safeText(mentorIdEl.value);
-    if(!mentorId) return "";
-    return `https://novalusprime.com/Invite/${encodeURIComponent(mentorId)}`;
-  }
-
-  function setInviteUI(){
-    const url = buildInviteLink();
-    if(url){
-      inviteLinkEl.href = url;
-      inviteLinkEl.textContent = url;
-    }else{
-      inviteLinkEl.href = "#";
-      inviteLinkEl.textContent = "— (upiši Mentor ID gore)";
-    }
-  }
-
-  function calcScore(){
-    const fd = new FormData(quizForm);
-    let sum = 0;
-    for(let i=1;i<=9;i++){
-      sum += Number(fd.get(`q${i}`) || 0);
-    }
-    return sum;
-  }
-
-  function getRange(score){
-    let r = ranges.find(x => score >= x.min && score <= x.max);
-    if(!r) r = ranges[ranges.length - 1];
-    return r;
-  }
-
-  function pickChosenText(name){
-    const checked = quizForm.querySelector(`input[name="${name}"]:checked`);
-    if(!checked) return { text:"-", points:null };
-    const opt = checked.closest(".opt");
-    const text = opt?.querySelector(".label-text")?.textContent?.trim() || "-";
-    const pts = opt?.dataset?.points ? Number(opt.dataset.points) : null;
-    return { text, points: (Number.isFinite(pts) ? pts : null) };
-  }
-
-  function buildAnswersLines(){
-    const lines = [];
-    for(let i=1;i<=9;i++){
-      const key = `q${i}`;
-      const { text } = pickChosenText(key);
-      lines.push(`${i}) ${titles[key]}: ${text}`);
+      --greenA:#c7ffb6;
+      --greenB:#52e07f;
+      --greenC:#16b45c;
     }
 
-    const a10 = pickChosenText("i10").text;
-    const a11 = pickChosenText("i11").text;
-    const a12 = pickChosenText("i12").text;
-    const a13 = pickChosenText("i13").text;
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      color:var(--text);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(1200px 800px at 10% 10%, rgba(255,215,0,.25), transparent 55%),
+        radial-gradient(900px 700px at 92% 18%, rgba(0,255,255,.16), transparent 55%),
+        radial-gradient(900px 700px at 25% 92%, rgba(255,0,128,.16), transparent 55%),
+        radial-gradient(900px 700px at 70% 85%, rgba(120,255,0,.10), transparent 55%),
+        linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 35%, var(--bg3) 70%, #0c1b2f 100%);
+      overflow-x:hidden;
+    }
 
-    const interest =
-      `10) ${titles.i10}: ${a10}\n` +
-      `11) ${titles.i11}: ${a11}\n` +
-      `12) ${titles.i12}: ${a12}\n` +
-      `13) ${titles.i13}: ${a13}`;
+    a{ color:#a7d6ff; text-decoration:none; }
+    a:hover{ text-decoration:underline; }
 
-    return { scored: lines.join("\n"), interest };
-  }
+    .wrap{ max-width: 1040px; margin:0 auto; padding:18px; }
 
-  function makeSummary(score){
-    const mentorId = safeText(mentorIdEl.value) || "(nije upisan)";
-    const mentorEmail = safeText(mentorEmailEl.value) || "(nije upisan)";
-    const mentorPhone = safeText(mentorPhoneEl.value) || "(nije upisan)";
-    const cand = candidateName();
-    const note = safeText(candidateNoteEl.value) || "-";
+    .topbar{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:14px;
+      padding: 14px 0 8px;
+    }
+    .brand{ display:flex; align-items:center; gap:10px; }
+    .logo{
+      width:40px; height:40px; border-radius:14px;
+      background:
+        radial-gradient(12px 12px at 30% 30%, rgba(255,255,255,.25), transparent 55%),
+        linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.06));
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow: 0 14px 30px rgba(0,0,0,.35);
+    }
+    .title{
+      margin:0;
+      font-weight: 950;
+      letter-spacing:.2px;
+      font-size: 26px;
+      line-height:1.12;
+    }
+    .subtitle{
+      margin:6px 0 0;
+      color: var(--muted);
+      line-height:1.45;
+      max-width: 70ch;
+      font-size: 14px;
+    }
 
-    const r = getRange(score);
-    const passed = score >= PASS_THRESHOLD;
-    const invite = buildInviteLink() || "(upiši Mentor ID da se generira link)";
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.08);
+      color: var(--muted);
+      font-size: 13px;
+      box-shadow: 0 14px 35px rgba(0,0,0,.28);
+      white-space:nowrap;
+    }
+    .dot{
+      width:9px; height:9px; border-radius:99px;
+      background: rgba(255,255,255,.55);
+      box-shadow: 0 0 0 6px rgba(255,255,255,.08);
+    }
 
-    const { scored, interest } = buildAnswersLines();
+    .card{
+      background: var(--card);
+      border: 1px solid var(--stroke);
+      backdrop-filter: blur(10px);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+      margin: 14px 0;
+    }
 
-    return (
+    .grid{ display:grid; grid-template-columns: 1fr; gap:12px; }
+    @media (min-width: 900px){
+      .grid.two{ grid-template-columns: 1fr 1fr; }
+      .grid.three{ grid-template-columns: 1fr 1fr 1fr; }
+    }
+
+    label{ display:block; font-weight: 900; margin-bottom: 6px; }
+    .hint{ color: var(--muted); font-size: 13px; line-height:1.35; margin-top: 6px; }
+
+    input[type="text"], input[type="email"], input[type="tel"], textarea{
+      width:100%;
+      padding: 11px 12px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.25);
+      color: var(--text);
+      outline:none;
+    }
+    textarea{ min-height: 90px; resize: vertical; }
+
+    .section-title{
+      margin:0 0 10px;
+      font-size: 18px;
+      font-weight: 950;
+      letter-spacing:.2px;
+    }
+
+    .note{
+      color: rgba(255,255,255,.72);
+      font-size: 13px;
+      line-height:1.45;
+      margin: 8px 0 0;
+    }
+
+    .q{
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      overflow:hidden;
+      position:relative;
+    }
+
+    .q::before{
+      content:"";
+      position:absolute; inset:-1px;
+      background:
+        radial-gradient(500px 120px at 10% 0%, rgba(255,255,255,.10), transparent 65%),
+        radial-gradient(420px 100px at 90% 0%, rgba(0,255,255,.08), transparent 65%);
+      pointer-events:none;
+      opacity:.8;
+    }
+
+    .qtitle{
+      margin:0 0 10px;
+      font-weight: 950;
+      letter-spacing:.2px;
+      position:relative;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+    }
+
+    .qbadge{
+      font-size:12px;
+      color: rgba(255,255,255,.70);
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      white-space:nowrap;
+    }
+
+    .opts{
+      display:grid;
+      gap: 10px;
+      position:relative;
+    }
+
+    .opt{
+      cursor:pointer;
+      user-select:none;
+      position:relative;
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
+      box-shadow:
+        0 10px 0 rgba(0,0,0,.38),
+        0 18px 30px rgba(0,0,0,.38);
+      transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      min-height: 48px;
+    }
+
+    .opt input[type="radio"]{
+      position:absolute;
+      opacity:0;
+      pointer-events:none;
+    }
+
+    .opt:hover{ filter: brightness(1.06); }
+    .opt:active{
+      transform: translateY(7px);
+      box-shadow:
+        0 3px 0 rgba(0,0,0,.38),
+        0 10px 18px rgba(0,0,0,.38);
+    }
+
+    .opt .label-text{
+      font-weight: 900;
+      letter-spacing:.1px;
+      line-height: 1.25;
+    }
+
+    .points{
+      opacity:0;
+      transform: translateY(-6px) scale(.98);
+      transition: opacity .18s ease, transform .18s ease;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.25);
+      color: rgba(255,255,255,.90);
+      font-weight: 950;
+      font-size: 12px;
+      white-space:nowrap;
+      box-shadow: 0 10px 22px rgba(0,0,0,.28);
+    }
+
+    .opt.selected{
+      color: #1b1400;
+      background: linear-gradient(180deg, var(--goldA) 0%, var(--goldB) 40%, var(--goldC) 100%);
+      border: 1px solid rgba(255,255,255,.35);
+    }
+    .opt.selected .points{
+      opacity:1;
+      transform: translateY(0) scale(1);
+      background: rgba(255,255,255,.20);
+      border: 1px solid rgba(255,255,255,.45);
+      color: #1b1400;
+    }
+
+    .sparkle{
+      position:absolute; right: 14px; top: 50%;
+      transform: translateY(-50%);
+      width: 10px; height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.9);
+      filter: blur(.2px);
+      opacity: 0;
+      pointer-events:none;
+    }
+    .opt.pop .sparkle{ animation: popSpark .40s ease forwards; }
+    @keyframes popSpark{
+      0%{ opacity:0; transform: translateY(-50%) scale(.3); }
+      40%{ opacity:.95; transform: translateY(-50%) scale(1.4); }
+      100%{ opacity:0; transform: translateY(-50%) scale(2.2); }
+    }
+
+    .okBox{
+      border-radius: 18px;
+      padding: 12px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      margin-top: 10px;
+    }
+    .line{ margin:0; line-height:1.45; }
+
+    .summary{
+      background: rgba(0,0,0,.55);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 18px;
+      padding: 14px;
+      overflow:auto;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 13px;
+      line-height: 1.35;
+      color: rgba(255,255,255,.92);
+    }
+
+    .btn-row{ display:flex; flex-wrap:wrap; gap: 10px; margin-top: 12px; }
+
+    .btn{
+      border: 0;
+      cursor: pointer;
+      border-radius: 16px;
+      padding: 12px 16px;
+      font-weight: 950;
+      letter-spacing:.2px;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      user-select:none;
+
+      transform: translateY(0);
+      box-shadow:
+        0 10px 0 rgba(0,0,0,.40),
+        0 18px 35px rgba(0,0,0,.40);
+      transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+    }
+    .btn:hover{ filter: brightness(1.06); }
+    .btn:active{
+      transform: translateY(7px);
+      box-shadow:
+        0 3px 0 rgba(0,0,0,.40),
+        0 10px 18px rgba(0,0,0,.40);
+    }
+
+    .btn-ghost{
+      color: rgba(255,255,255,.92);
+      background: linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.08));
+      border: 1px solid rgba(255,255,255,.18);
+    }
+    .btn-gold{
+      color:#1b1400;
+      background: linear-gradient(180deg, var(--goldA) 0%, var(--goldB) 40%, var(--goldC) 100%);
+      border: 1px solid rgba(255,255,255,.35);
+    }
+    .btn-green{
+      color:#041a07;
+      background: linear-gradient(180deg, var(--greenA) 0%, var(--greenB) 45%, var(--greenC) 100%);
+      border: 1px solid rgba(255,255,255,.30);
+    }
+
+    .footer{
+      margin: 14px 0 24px;
+      text-align:center;
+      color: rgba(255,255,255,.60);
+      font-size: 12px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div>
+        <div class="brand">
+          <div class="logo" aria-hidden="true"></div>
+          <div>
+            <h1 class="title">Novalus Prime – Upitnik kompatibilnosti</h1>
+            <p class="subtitle">
+              Kandidat popunjava upitnik, a mentor dobije jasan sažetak (copy / email / WhatsApp / Telegram).
+              Bodovi se vide tek nakon odabira odgovora – vizualno “premium” i informativno.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="pill" id="statusPill"><span class="dot"></span>Spreman za ispunjavanje</div>
+    </div>
+
+    <div class="card">
+      <h2 class="section-title">Podaci mentora (preporučitelja)</h2>
+      <div class="grid two">
+        <div>
+          <label for="mentorId">Mentor ID (za invite link)</label>
+          <input id="mentorId" name="mentorId" type="text" placeholder="npr. 43914344" />
+          <div class="hint">Od ovoga se generira Novalus invite link.</div>
+        </div>
+        <div>
+          <label for="mentorEmail">Email mentora</label>
+          <input id="mentorEmail" name="mentorEmail" type="email" placeholder="mentor@email.com" />
+          <div class="hint">Gumb “Pošalji email” otvara tvoju mail aplikaciju s pripremljenim sažetkom.</div>
+        </div>
+        <div>
+          <label for="mentorPhone">Telefon mentora (za WhatsApp)</label>
+          <input id="mentorPhone" name="mentorPhone" type="tel" placeholder="+385..." />
+          <div class="hint">Format: +385... (WhatsApp najbolje radi s punim brojem).</div>
+        </div>
+        <div>
+          <label for="candidateName">Ime kandidata (opcionalno)</label>
+          <input id="candidateName" name="candidateName" type="text" placeholder="Ime i prezime" />
+          <div class="hint">Ako nije upisano, u sažetku piše “Kandidat”.</div>
+        </div>
+      </div>
+    </div>
+
+    <form id="quizForm" class="card">
+      <h2 class="section-title">Pitanja (boduje se 1–9)</h2>
+      <p class="note" style="margin-top:0;">
+        Klikom na odgovor dobiješ 3D izbor + bodove (tek nakon odabira). To daje jasnu sliku i kandidatu i mentoru.
+      </p>
+
+      <!-- Q1 -->
+      <div class="q">
+        <p class="qtitle">1) MLM stav <span class="qbadge">klikni odgovor</span></p>
+        <div class="opts" data-q="q1">
+          <label class="opt" data-points="25">
+            <input type="radio" name="q1" value="25" required />
+            <span class="label-text">a) Korektan oblik poduzetništva</span>
+            <span class="points"></span><span class="sparkle"></span>
+          </label>
+          <label class="opt" data-points="15">
+            <input type="radio" name="q1" value="15" />
+            <span class="label-text">b) Može biti dobar uz oprez</span>
+            <span class="points"></span><span class="sparkle"></span>
+          </label>
+          <label class="opt" data-points="5">
+            <input type="radio" name="q1" value="5" />
+            <span class="label-text">c) Ne vjerujem u to</span>
+            <span class="points"></span><span class="sparkle"></span>
+          </label>
+          <label class="opt" data-points="0">
+            <input type="radio" name="q1" value="0" />
+            <span class="label-text">d) Negativan stav</span>
+            <span class="points"></span><span class="sparkle"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="q">
+        <p class="qtitle">2) Nagrade/prihodi ovise o <span class="qbadge">klikni odgovor</span></p>
+        <div class="opts" data-q="q2">
+          <label class="opt" data-points="25">
+            <input type="radio" name="q2" value="25" required />
+            <span class="label-text">a) Ovisi o paketu</span>
+            <span class="points"></span><span class="sparkle"></span>
+          </label>
+          <label class="opt" data-points="20">
+            <input type="radio" name="q2" value="20" />
+            <span class="label-text">b) Ovisi o aktivnosti i produkciji strukture</span>
+            <span class="points"></span><span class="sparkle"></span>
+          </label>
+          <label class="opt" data-points="10">
+            <input type="radio" name="q2" value="10" />
+            <span class="label-text">c) Sreći / okolnostima</span>
+            <span class="points"></span><span class="sparkle"></span>
+          </label>
+          <label class="opt" data-points="0">
+            <input type="radio" name="q2" value="0" />
+            <span class="label-text">d) Ne znam</span>
+            <span class="points"></span><span class="sparkle"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="q">
+        <p class="qtitle">3) Vrijeme tjedno koje može izdvojiti <span class="qbadge">klikni odgovor</span></p>
+        <div class="opts" data-q="q3">
+          <label class="opt" data-points="25">
+            <input type="radio" name="q3" value="25" required />
+            <span class="label-text">a) 10+ sati</span>
+            <span class="points"></span><span class="sparkle"></span>
+          </label>
+          <label class="opt" data-points="18">
+            <input type="radio" name="q3" value="18" />
+            <span class="label-text">b) 6–9 sati</span>
+            <span class="points"></span><span class="sparkle"></span>
+          </label>
+          <label class="opt" data-points="10">
+            <input type="radio" name="q3" value="10" />
+            <span class="label-text">c) 3–5 sati</span>
+            <span class="points"></span><span class="sparkle"></span>
+          </label>
+          <label class="opt" data-points="0">
+            <input type="radio" name="q3" value="0" />
+            <span class="label-text">d) &lt; 3 sata</span>
+            <span class="points"></span><span class="sparkle"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Q4 -->
+      <div class="q">
+        <p class="qtitle">4) Učenje vještina <span class="qbadge">klikni odgovor</span></p>
+        <div class="opts" data-q="q4">
+          <label class="opt" data-points="25">
+            <input type="radio" name="q4" value="25" required />
+            <span class="label-text">a) Učenje je nužno</span>
+            <span class="points"></span><span class="sparkle"></span>
+          </label>
+          <label class="opt" data-points="12">
+            <input type="radio" name="q4" value="12" />
+            <span class="label-text">b) Učio bih usput</span>
+            <span class="points"></span><span class="sparkle"></span>
+          </label>
+          <label class="opt" data-points="0">
+            <input type="radio" name="q4" value="0" />
+            <span class="label-text">c) Ne volim učiti</span>
+            <span class="points"></span><span class="sparkle"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Q5 -->
+      <div class="q">
+        <p class="qtitle">5) Dugoročni rezultati <span class="qbadge">klikni odgovor</span></p>
+        <div class="opts" data-q="q5">
+          <label class="opt" data-points="25">
+            <input type="radio" name="q5" value="25" required />
+            <span class="label-text">a) Dugoročno prirodno</span>
+            <span class="points"></span><span class="sparkle"></span>
+          </label>
+          <label class="opt" data-points="12">
+            <input type="radio" name="q5" value="12" />
+            <span class="label-text">b) Možda, ali nisam siguran</span>
+            <span class="points"></span><span class="sparkle"></span>
+          </label>
+          <label class="opt" data-points="0">
+            <input type="radio" name="q5" value="0" />
+            <span class="label-text">c) Ne vjerujem u dugoročno</span>
+            <span class="points"></span><span class="sparkle"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Q6 -->
+      <div class="q">
+        <p class="qtitle">6) Važnost jasnog objašnjenja <span class="qbadge">klikni odgovor</span></p>
+        <div class="opts" data-q="q6">
+          <label class="opt" data-points="25">
+            <input type="radio" name="q6" value="25" required />
+            <span class="label-text">a) Jako važno</span>
+            <span class="points"></span><span class="sparkle"></span>
+          </label>
+          <label class="opt" data-points="12">
+            <input type="radio" name="q6" value="12" />
+            <span class="label-text">b) Djelomično</span>
+            <span class="points"></span><span class="sparkle"></span>
+          </label>
+          <label class="opt" data-points="0">
+            <input type="radio" name="q6" value="0" />
+            <span class="label-text">c) Nije bitno</span>
+            <span class="points"></span><span class="sparkle"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Q7 -->
+      <div class="q">
+        <p class="qtitle">7) Spremnost na plan 30 dana <span class="qbadge">klikni odgovor</span></p>
+        <div class="opts" data-q="q7">
+          <label class="opt" data-points="25">
+            <input type="radio" name="q7" value="25" required />
+            <span class="label-text">a) Volim plan</span>
+            <span class="points"></span><span class="sparkle"></span>
+          </label>
+          <label class="opt" data-points="12">
+            <input type="radio" name="q7" value="12" />
+            <span class="label-text">b) Može, ali fleksibilno</span>
+            <span class="points"></span><span class="sparkle"></span>
+          </label>
+          <label class="opt" data-points="0">
+            <input type="radio" name="q7" value="0" />
+            <span class="label-text">c) Ne volim planove</span>
+            <span class="points"></span><span class="sparkle"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Q8 -->
+      <div class="q">
+        <p class="qtitle">8) Razgovor s ljudima <span class="qbadge">klikni odgovor</span></p>
+        <div class="opts" data-q="q8">
+          <label class="opt" data-points="25">
+            <input type="radio" name="q8" value="25" required />
+            <span class="label-text">a) Prirodno mi je</span>
+            <span class="points"></span><span class="sparkle"></span>
+          </label>
+          <label class="opt" data-points="12">
+            <input type="radio" name="q8" value="12" />
+            <span class="label-text">b) Mogu uz vježbu</span>
+            <span class="points"></span><span class="sparkle"></span>
+          </label>
+          <label class="opt" data-points="0">
+            <input type="radio" name="q8" value="0" />
+            <span class="label-text">c) Ne želim razgovarati</span>
+            <span class="points"></span><span class="sparkle"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Q9 -->
+      <div class="q">
+        <p class="qtitle">9) Financijski okvir <span class="qbadge">klikni odgovor</span></p>
+        <div class="opts" data-q="q9">
+          <label class="opt" data-points="25">
+            <input type="radio" name="q9" value="25" required />
+            <span class="label-text">a) Spreman uložiti pametno</span>
+            <span class="points"></span><span class="sparkle"></span>
+          </label>
+          <label class="opt" data-points="12">
+            <input type="radio" name="q9" value="12" />
+            <span class="label-text">b) Samo minimalno</span>
+            <span class="points"></span><span class="sparkle"></span>
+          </label>
+          <label class="opt" data-points="0">
+            <input type="radio" name="q9" value="0" />
+            <span class="label-text">c) Nema mogućnosti</span>
+            <span class="points"></span><span class="sparkle"></span>
+          </label>
+        </div>
+      </div>
+
+      <h2 class="section-title" style="margin-top:16px;">Interes (bez bodova)</h2>
+
+      <div class="grid two">
+        <div class="q">
+          <p class="qtitle">10) Što dalje želi? <span class="qbadge">bez bodova</span></p>
+          <div class="opts" data-q="i10">
+            <label class="opt">
+              <input type="radio" name="i10" value="Kratki video" required />
+              <span class="label-text">Kratki video</span>
+              <span class="points"></span><span class="sparkle"></span>
+            </label>
+            <label class="opt">
+              <input type="radio" name="i10" value="Zoom poziv" />
+              <span class="label-text">Zoom poziv</span>
+              <span class="points"></span><span class="sparkle"></span>
+            </label>
+            <label class="opt">
+              <input type="radio" name="i10" value="Zasad ništa" />
+              <span class="label-text">Zasad ništa</span>
+              <span class="points"></span><span class="sparkle"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="q">
+          <p class="qtitle">11) Tombola / webinar <span class="qbadge">bez bodova</span></p>
+          <div class="opts" data-q="i11">
+            <label class="opt">
+              <input type="radio" name="i11" value="Prisustvovati i sudjelovati" required />
+              <span class="label-text">Prisustvovati i sudjelovati</span>
+              <span class="points"></span><span class="sparkle"></span>
+            </label>
+            <label class="opt">
+              <input type="radio" name="i11" value="Možda kasnije" />
+              <span class="label-text">Možda kasnije</span>
+              <span class="points"></span><span class="sparkle"></span>
+            </label>
+            <label class="opt">
+              <input type="radio" name="i11" value="Ne zanima" />
+              <span class="label-text">Ne zanima</span>
+              <span class="points"></span><span class="sparkle"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="q">
+          <p class="qtitle">12) Preporuka druge osobe <span class="qbadge">bez bodova</span></p>
+          <div class="opts" data-q="i12">
+            <label class="opt">
+              <input type="radio" name="i12" value="Da" required />
+              <span class="label-text">Da</span>
+              <span class="points"></span><span class="sparkle"></span>
+            </label>
+            <label class="opt">
+              <input type="radio" name="i12" value="Ne" />
+              <span class="label-text">Ne</span>
+              <span class="points"></span><span class="sparkle"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="q">
+          <p class="qtitle">13) Kako ti zvuči ovaj model gradnje tima? <span class="qbadge">bez bodova</span></p>
+          <div class="hint" style="margin-top:-6px;">
+            Popuni upitnik → registracija u Novalus Prime → odabir investicije → isti upitnik šalješ ljudima koje želiš u timu.
+            Bez dodatnih obveza; sustav i vodstvo tima vode korake.
+          </div>
+          <div class="opts" data-q="i13">
+            <label class="opt">
+              <input type="radio" name="i13" value="Odlično – ovo mi odgovara" required />
+              <span class="label-text">Odlično – ovo mi odgovara</span>
+              <span class="points"></span><span class="sparkle"></span>
+            </label>
+            <label class="opt">
+              <input type="radio" name="i13" value="Zanimljivo – trebam još informacija" />
+              <span class="label-text">Zanimljivo – trebam još informacija</span>
+              <span class="points"></span><span class="sparkle"></span>
+            </label>
+            <label class="opt">
+              <input type="radio" name="i13" value="Nisam siguran – treba mi vremena" />
+              <span class="label-text">Nisam siguran – treba mi vremena</span>
+              <span class="points"></span><span class="sparkle"></span>
+            </label>
+            <label class="opt">
+              <input type="radio" name="i13" value="Ne odgovara mi ovakav model" />
+              <span class="label-text">Ne odgovara mi ovakav model</span>
+              <span class="points"></span><span class="sparkle"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="q">
+          <p class="qtitle">Napomena kandidata (opcionalno) <span class="qbadge">tekst</span></p>
+          <textarea id="candidateNote" name="candidateNote" placeholder="Možeš dodati svoj komentar, pitanje ili situaciju..."></textarea>
+        </div>
+      </div>
+
+      <div class="btn-row" style="margin-top:14px;">
+        <button class="btn btn-ghost" type="submit">✅ Izračunaj rezultat</button>
+        <button class="btn btn-ghost" type="button" id="btnReset">↩ Reset</button>
+      </div>
+
+      <p class="note">
+        Privatnost: ovaj upitnik ne šalje podatke nikamo automatski. Sve ostaje u pregledniku dok mentor ručno ne pošalje sažetak.
+      </p>
+    </form>
+
+    <div class="card" id="resultCard" style="display:none;">
+      <h2 class="section-title">Rezultat</h2>
+
+      <div class="okBox">
+        <p class="line" id="scoreLine"></p>
+        <p class="line" id="rangeLine"></p>
+        <p class="line" id="passLine"></p>
+      </div>
+
+      <div class="okBox">
+        <p class="line"><strong>Invite link (mentor):</strong> <a id="inviteLink" href="#" target="_blank" rel="noopener noreferrer">—</a></p>
+      </div>
+
+      <h3 class="section-title" style="margin-top:14px;">Sažetak (za mentora)</h3>
+      <div class="summary" id="mentorSummary"></div>
+
+      <div class="btn-row">
+        <button id="btnCopy" class="btn btn-ghost" type="button">📋 Kopiraj sažetak</button>
+        <button id="btnEmail" class="btn btn-ghost" type="button">✉️ Email mentoru</button>
+        <button id="btnWA" class="btn btn-ghost" type="button">🟢 WhatsApp mentoru</button>
+        <button id="btnTG" class="btn btn-ghost" type="button">📨 Telegram mentoru</button>
+      </div>
+
+      <p class="note" style="margin-top:12px;">
+        Savjet: WhatsApp/Telegram su najbolji jer rade globalno i bez SMS troškova.
+      </p>
+    </div>
+
+    <div class="footer">
+      © Novalus Prime – Upitnik kompatibilnosti (lokalno u pregledniku)
+    </div>
+  </div>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+
+    const PASS_THRESHOLD = 120;
+
+    const ranges = [
+      { min: 151, max: 220, label: "151–220: vrlo dobra kompatibilnost", rec: "Preporuka: uključivanje uz mentorstvo i konkretne korake." },
+      { min: 81,  max: 150, label: "81–150: potencijal postoji",       rec: "Preporuka: sporiji tempo, jasna očekivanja, dogovor oko plana." },
+      { min: 0,   max: 80,  label: "0–80: trenutno nezrelo",           rec: "Preporuka: edukacija i pauza; bez pritiska." }
+    ];
+
+    const titles = {
+      q1: "MLM stav",
+      q2: "Nagrade/prihodi ovise o",
+      q3: "Vrijeme tjedno koje može izdvojiti",
+      q4: "Učenje vještina",
+      q5: "Dugoročni rezultati",
+      q6: "Važnost jasnog objašnjenja",
+      q7: "Spremnost na plan 30 dana",
+      q8: "Razgovor s ljudima",
+      q9: "Financijski okvir",
+      i10: "Što dalje želi",
+      i11: "Tombola / webinar",
+      i12: "Preporuka druge osobe",
+      i13: "Model gradnje tima"
+    };
+
+    // DOM
+    const quizForm = document.getElementById("quizForm");
+    const resultCard = document.getElementById("resultCard");
+    const mentorSummaryEl = document.getElementById("mentorSummary");
+    const statusPill = document.getElementById("statusPill");
+
+    const mentorIdEl = document.getElementById("mentorId");
+    const mentorEmailEl = document.getElementById("mentorEmail");
+    const mentorPhoneEl = document.getElementById("mentorPhone");
+    const candidateNameEl = document.getElementById("candidateName");
+    const candidateNoteEl = document.getElementById("candidateNote");
+    const inviteLinkEl = document.getElementById("inviteLink");
+
+    const scoreLine = document.getElementById("scoreLine");
+    const rangeLine = document.getElementById("rangeLine");
+    const passLine  = document.getElementById("passLine");
+
+    const btnReset = document.getElementById("btnReset");
+    const btnCopy  = document.getElementById("btnCopy");
+    const btnEmail = document.getElementById("btnEmail");
+    const btnWA    = document.getElementById("btnWA");
+    const btnTG    = document.getElementById("btnTG");
+
+    // Safety: ako je nešto null, reci u konzolu i prekini (da ne bude bijelo)
+    const must = [quizForm,resultCard,mentorSummaryEl,statusPill,mentorIdEl,mentorEmailEl,mentorPhoneEl,candidateNameEl,candidateNoteEl,inviteLinkEl,scoreLine,rangeLine,passLine,btnReset,btnCopy,btnEmail,btnWA,btnTG];
+    if(must.some(x => !x)){
+      console.error("Nedostaje neki element u HTML-u (ID mismatch ili krivi index.html).");
+      return;
+    }
+
+    function safeText(v){ return (v ?? "").toString().trim(); }
+    function candidateName(){ return safeText(candidateNameEl.value) || "Kandidat"; }
+
+    function buildInviteLink(){
+      const mentorId = safeText(mentorIdEl.value);
+      if(!mentorId) return "";
+      return `https://novalusprime.com/Invite/${encodeURIComponent(mentorId)}`;
+    }
+
+    function setInviteUI(){
+      const url = buildInviteLink();
+      if(url){
+        inviteLinkEl.href = url;
+        inviteLinkEl.textContent = url;
+      }else{
+        inviteLinkEl.href = "#";
+        inviteLinkEl.textContent = "— (upiši Mentor ID gore)";
+      }
+    }
+
+    function calcScore(){
+      const fd = new FormData(quizForm);
+      let sum = 0;
+      for(let i=1;i<=9;i++){
+        sum += Number(fd.get(`q${i}`) || 0);
+      }
+      return sum;
+    }
+
+    function getRange(score){
+      let r = ranges.find(x => score >= x.min && score <= x.max);
+      if(!r) r = ranges[ranges.length - 1];
+      return r;
+    }
+
+    function pickChosenText(name){
+      const checked = quizForm.querySelector(`input[name="${name}"]:checked`);
+      if(!checked) return { text:"-", points:null };
+      const opt = checked.closest(".opt");
+      const text = opt?.querySelector(".label-text")?.textContent?.trim() || "-";
+      const pts = opt?.dataset?.points ? Number(opt.dataset.points) : null;
+      return { text, points: (Number.isFinite(pts) ? pts : null) };
+    }
+
+    function buildAnswersLines(){
+      const lines = [];
+      for(let i=1;i<=9;i++){
+        const key = `q${i}`;
+        const { text } = pickChosenText(key);
+        lines.push(`${i}) ${titles[key]}: ${text}`);
+      }
+
+      const a10 = pickChosenText("i10").text;
+      const a11 = pickChosenText("i11").text;
+      const a12 = pickChosenText("i12").text;
+      const a13 = pickChosenText("i13").text;
+
+      const interest =
+        `10) ${titles.i10}: ${a10}\n` +
+        `11) ${titles.i11}: ${a11}\n` +
+        `12) ${titles.i12}: ${a12}\n` +
+        `13) ${titles.i13}: ${a13}`;
+
+      return { scored: lines.join("\n"), interest };
+    }
+
+    function makeSummary(score){
+      const mentorId = safeText(mentorIdEl.value) || "(nije upisan)";
+      const mentorEmail = safeText(mentorEmailEl.value) || "(nije upisan)";
+      const mentorPhone = safeText(mentorPhoneEl.value) || "(nije upisan)";
+      const cand = candidateName();
+      const note = safeText(candidateNoteEl.value) || "-";
+
+      const r = getRange(score);
+      const passed = score >= PASS_THRESHOLD;
+      const invite = buildInviteLink() || "(upiši Mentor ID da se generira link)";
+      const { scored, interest } = buildAnswersLines();
+
+      return (
 `NOVALUS PRIME – SAŽETAK UPITNIKA
 Mentor ID: ${mentorId}
 Mentor email: ${mentorEmail}
@@ -151,191 +900,183 @@ ${note}
 Invite link (ako kandidat želi): ${invite}
 ${passed ? "" : "\nStatus: Kandidat trenutno ne prelazi bodovni prag – preporuka bez pritiska."}
 `);
-  }
-
-  function paintShareButtons(score){
-    const passed = score >= PASS_THRESHOLD;
-    const cls = passed ? "btn-gold" : "btn-green";
-    [btnEmail, btnWA, btnTG].forEach(b=>{
-      b.classList.remove("btn-ghost","btn-gold","btn-green");
-      b.classList.add(cls);
-    });
-  }
-
-  function setStatus(text){
-    statusPill.innerHTML = `<span class="dot"></span>${text}`;
-  }
-
-  function allRequiredAnswered(){
-    // Ako browser već blokira submit zbog required, ovo je dodatno za status
-    const required = quizForm.querySelectorAll("input[required]");
-    for(const r of required){
-      const name = r.name;
-      if(!quizForm.querySelector(`input[name="${name}"]:checked`)) return false;
-    }
-    return true;
-  }
-
-  // ===== UI: 3D SELECTED + POINTS =====
-  function updateGroupUI(groupEl){
-    const opts = groupEl.querySelectorAll(".opt");
-    opts.forEach(o=>{
-      o.classList.remove("selected","pop");
-      const ptsEl = o.querySelector(".points");
-      if(ptsEl) ptsEl.textContent = "";
-    });
-
-    const checked = groupEl.querySelector('input[type="radio"]:checked');
-    if(!checked) return;
-
-    const opt = checked.closest(".opt");
-    if(!opt) return;
-
-    opt.classList.add("selected","pop");
-
-    const pts = opt.dataset.points;
-    const ptsEl = opt.querySelector(".points");
-    if(ptsEl){
-      if(pts !== undefined && pts !== null && pts !== ""){
-        ptsEl.textContent = `${pts} bod`;
-      }else{
-        ptsEl.textContent = ""; // interes pitanja
-      }
     }
 
-    // makni "pop" nakon animacije
-    setTimeout(()=>opt.classList.remove("pop"), 450);
-  }
-
-  function bindOptionsUI(){
-    document.querySelectorAll(".opts").forEach(groupEl=>{
-      groupEl.addEventListener("change", ()=>{
-        updateGroupUI(groupEl);
-        setInviteUI();
-        setStatus(allRequiredAnswered() ? "Spreman za izračun" : "Spreman za ispunjavanje");
+    function paintShareButtons(score){
+      const passed = score >= PASS_THRESHOLD;
+      const cls = passed ? "btn-gold" : "btn-green";
+      [btnEmail, btnWA, btnTG].forEach(b=>{
+        b.classList.remove("btn-ghost","btn-gold","btn-green");
+        b.classList.add(cls);
       });
-      // inicijalno stanje (ako browser restore-a form state)
-      updateGroupUI(groupEl);
-    });
-  }
-
-  // ===== ACTIONS =====
-  async function copySummary(){
-    const text = mentorSummaryEl.innerText.trim();
-    if(!text) return alert("Nema sažetka za kopiranje.");
-    try{
-      await navigator.clipboard.writeText(text);
-      alert("Sažetak kopiran. Zalijepi u WhatsApp/Telegram/email.");
-    }catch(e){
-      const ta = document.createElement("textarea");
-      ta.value = text;
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand("copy");
-      document.body.removeChild(ta);
-      alert("Sažetak kopiran.");
     }
-  }
 
-  function sendEmail(){
-    const to = safeText(mentorEmailEl.value);
-    if(!to) return alert("Nije upisan email mentora.");
-    const body = mentorSummaryEl.innerText.trim();
-    if(!body) return alert("Nema sažetka za slanje.");
+    function setStatus(text){
+      statusPill.innerHTML = `<span class="dot"></span>${text}`;
+    }
 
-    const subject = `Novalus Prime – rezultat upitnika (${candidateName()})`;
-    const mailto =
-      `mailto:${encodeURIComponent(to)}?` +
-      `subject=${encodeURIComponent(subject)}&` +
-      `body=${encodeURIComponent(body)}`;
+    function allRequiredAnswered(){
+      const required = quizForm.querySelectorAll("input[required]");
+      for(const r of required){
+        const name = r.name;
+        if(!quizForm.querySelector(`input[name="${name}"]:checked`)) return false;
+      }
+      return true;
+    }
 
-    window.location.href = mailto;
-  }
-
-  function sendWhatsApp(){
-    const phone = safeText(mentorPhoneEl.value).replace(/\s+/g,"");
-    if(!phone) return alert("Nije upisan telefon mentora.");
-    const text = mentorSummaryEl.innerText.trim();
-    if(!text) return alert("Nema sažetka za slanje.");
-
-    // WhatsApp wa.me treba broj bez + i bez razmaka
-    const digits = phone.replace(/[^\d]/g,"");
-    if(!digits) return alert("Telefon nije u dobrom formatu. Upiši npr. +385...");
-
-    const url = `https://wa.me/${digits}?text=${encodeURIComponent(text)}`;
-    window.open(url, "_blank", "noopener,noreferrer");
-  }
-
-  function sendTelegram(){
-    const text = mentorSummaryEl.innerText.trim();
-    if(!text) return alert("Nema sažetka za slanje.");
-    const url = `https://t.me/share/url?text=${encodeURIComponent(text)}`;
-    window.open(url, "_blank", "noopener,noreferrer");
-  }
-
-  function doReset(){
-    quizForm.reset();
-
-    // makni selekcije i bodove u UI
-    document.querySelectorAll(".opts").forEach(groupEl=>{
-      groupEl.querySelectorAll(".opt").forEach(o=>{
+    // 3D UI selekcija
+    function updateGroupUI(groupEl){
+      const opts = groupEl.querySelectorAll(".opt");
+      opts.forEach(o=>{
         o.classList.remove("selected","pop");
         const ptsEl = o.querySelector(".points");
         if(ptsEl) ptsEl.textContent = "";
       });
-    });
 
-    mentorSummaryEl.textContent = "";
-    resultCard.style.display = "none";
-    setInviteUI();
-    setStatus("Spreman za ispunjavanje");
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
+      const checked = groupEl.querySelector('input[type="radio"]:checked');
+      if(!checked) return;
 
-  function onSubmit(e){
-    e.preventDefault();
+      const opt = checked.closest(".opt");
+      if(!opt) return;
 
-    // Browser već validira required, ali ako je nešto zaobiđeno:
-    if(!allRequiredAnswered()){
-      alert("Molim odgovori na sva obavezna pitanja (uključujući interes 10–13).");
-      return;
+      opt.classList.add("selected","pop");
+
+      const pts = opt.dataset.points;
+      const ptsEl = opt.querySelector(".points");
+      if(ptsEl){
+        if(pts !== undefined && pts !== null && pts !== ""){
+          ptsEl.textContent = `${pts} bod`;
+        }else{
+          ptsEl.textContent = "";
+        }
+      }
+      setTimeout(()=>opt.classList.remove("pop"), 450);
     }
 
-    const score = calcScore();
-    const r = getRange(score);
-    const passed = score >= PASS_THRESHOLD;
+    function bindOptionsUI(){
+      document.querySelectorAll(".opts").forEach(groupEl=>{
+        groupEl.addEventListener("change", ()=>{
+          updateGroupUI(groupEl);
+          setInviteUI();
+          setStatus(allRequiredAnswered() ? "Spreman za izračun" : "Spreman za ispunjavanje");
+        });
+        updateGroupUI(groupEl);
+      });
+    }
 
-    scoreLine.textContent = `Ukupno bodova: ${score} (prag prolaza: ${PASS_THRESHOLD})`;
-    rangeLine.textContent = `Procjena: ${r.label}`;
-    passLine.textContent  = passed ? "Status: ✅ Prelazi bodovni prag" : "Status: ⚠️ Ne prelazi bodovni prag";
+    async function copySummary(){
+      const text = mentorSummaryEl.innerText.trim();
+      if(!text) return alert("Nema sažetka za kopiranje.");
+      try{
+        await navigator.clipboard.writeText(text);
+        alert("Sažetak kopiran. Zalijepi u WhatsApp/Telegram/email.");
+      }catch(e){
+const ta = document.createElement
+              }catch(e){
+        // fallback ako clipboard nije dopušten (npr. file:// ili blokirano)
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.setAttribute("readonly", "");
+        ta.style.position = "fixed";
+        ta.style.top = "-9999px";
+        ta.style.left = "-9999px";
+        document.body.appendChild(ta);
+        ta.select();
+        try{
+          document.execCommand("copy");
+          alert("Sažetak kopiran (fallback). Zalijepi u WhatsApp/Telegram/email.");
+        }catch(err){
+          alert("Ne mogu kopirati automatski. Označi tekst ručno i kopiraj.");
+        }
+        document.body.removeChild(ta);
+      }
+    }
 
-    setInviteUI();
+    function openEmail(){
+      const email = safeText(mentorEmailEl.value);
+      if(!email) return alert("Upiši email mentora.");
+      const subject = encodeURIComponent(`Novalus Prime – sažetak upitnika (${candidateName()})`);
+      const body = encodeURIComponent(mentorSummaryEl.innerText.trim());
+      window.location.href = `mailto:${encodeURIComponent(email)}?subject=${subject}&body=${body}`;
+    }
 
-    mentorSummaryEl.textContent = makeSummary(score);
-    paintShareButtons(score);
+    function openWhatsApp(){
+      const phone = safeText(mentorPhoneEl.value).replace(/\s+/g,"");
+      if(!phone) return alert("Upiši telefon mentora (format +385...).");
+      const text = encodeURIComponent(mentorSummaryEl.innerText.trim());
+      // wa.me radi najbolje globalno
+      window.open(`https://wa.me/${encodeURIComponent(phone.replace(/^\+/,""))}?text=${text}`, "_blank", "noopener");
+    }
 
-    resultCard.style.display = "block";
-    setStatus("Rezultat izračunat");
-    resultCard.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
+    function openTelegram(){
+      const text = encodeURIComponent(mentorSummaryEl.innerText.trim());
+      // otvara Telegram share (radi gdje je podržano)
+      window.open(`https://t.me/share/url?url=&text=${text}`, "_blank", "noopener");
+    }
 
-  // ===== INIT =====
-  function init(){
-    setInviteUI();
-    bindOptionsUI();
+    function hardReset(){
+      quizForm.reset();
 
+      // očisti UI selekcije
+      document.querySelectorAll(".opts").forEach(groupEl=>{
+        const opts = groupEl.querySelectorAll(".opt");
+        opts.forEach(o=>{
+          o.classList.remove("selected","pop");
+          const ptsEl = o.querySelector(".points");
+          if(ptsEl) ptsEl.textContent = "";
+        });
+      });
+
+      mentorSummaryEl.textContent = "";
+      resultCard.style.display = "none";
+      setInviteUI();
+      setStatus("Spreman za ispunjavanje");
+      statusPill.scrollIntoView({ behavior:"smooth", block:"start" });
+    }
+
+    // EVENT: submit -> izračun + sažetak
+    quizForm.addEventListener("submit", (e)=>{
+      e.preventDefault();
+
+      setInviteUI();
+
+      const score = calcScore();
+      const r = getRange(score);
+      const passed = score >= PASS_THRESHOLD;
+
+      scoreLine.textContent = `${candidateName()}: ${score} bodova`;
+      rangeLine.textContent = `${r.label} • ${r.rec}`;
+      passLine.textContent  = passed
+        ? `✅ Kandidat prelazi prag (${PASS_THRESHOLD})`
+        : `ℹ️ Kandidat NE prelazi prag (${PASS_THRESHOLD}) – preporuka bez pritiska`;
+
+      mentorSummaryEl.textContent = makeSummary(score);
+
+      paintShareButtons(score);
+
+      resultCard.style.display = "block";
+      resultCard.scrollIntoView({ behavior:"smooth", block:"start" });
+
+      setStatus("Rezultat izračunat");
+    });
+
+    // EVENT: reset
+    btnReset.addEventListener("click", hardReset);
+
+    // EVENT: copy/email/wa/tg
+    btnCopy.addEventListener("click", copySummary);
+    btnEmail.addEventListener("click", openEmail);
+    btnWA.addEventListener("click", openWhatsApp);
+    btnTG.addEventListener("click", openTelegram);
+
+    // Invite link ažuriraj čim se upiše mentor ID
     mentorIdEl.addEventListener("input", setInviteUI);
 
-    quizForm.addEventListener("submit", onSubmit);
-    btnReset.addEventListener("click", doReset);
-
-    btnCopy.addEventListener("click", copySummary);
-    btnEmail.addEventListener("click", sendEmail);
-    btnWA.addEventListener("click", sendWhatsApp);
-    btnTG.addEventListener("click", sendTelegram);
-
+    // Inicijalno
+    setInviteUI();
+    bindOptionsUI();
     setStatus(allRequiredAnswered() ? "Spreman za izračun" : "Spreman za ispunjavanje");
-  }
-
-  init();
-</script>
+  });
+  </script>
+</body>
+</html>
