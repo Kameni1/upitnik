@@ -4,672 +4,630 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Novalus Prime – Upitnik kompatibilnosti</title>
+
   <style>
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 0; background:#f6f7fb; color:#111; }
-    .wrap { max-width: 920px; margin: 0 auto; padding: 20px; }
-    .card { background: #fff; border-radius: 14px; padding: 18px; box-shadow: 0 6px 22px rgba(0,0,0,.08); margin: 14px 0; }
-    h1 { font-size: 22px; margin: 0 0 10px; }
-    h2 { font-size: 18px; margin: 0 0 8px; }
-    p { line-height: 1.45; margin: 8px 0; }
-    .muted { color:#555; font-size: 14px; }
-    .grid { display: grid; gap: 12px; grid-template-columns: 1fr; }
-    @media (min-width: 820px){ .grid.two { grid-template-columns: 1fr 1fr; } }
-    label { display:block; font-size: 14px; margin: 8px 0 6px; }
-    input[type="text"], input[type="email"], input[type="tel"], textarea, select {
-      width: 100%; padding: 10px 11px; border: 1px solid #d7dbe6; border-radius: 10px; font-size: 15px; background: #fff;
+    :root{
+      --card-bg: rgba(255,255,255,.10);
+      --card-border: rgba(255,255,255,.14);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.70);
+      --shadow: 0 18px 45px rgba(0,0,0,.38);
+      --radius: 18px;
     }
-    textarea { min-height: 90px; resize: vertical; }
-    .q { margin-top: 10px; }
-    .opts { margin-top: 8px; display: grid; gap: 8px; }
-    .opt { display:flex; gap: 10px; align-items:flex-start; padding: 10px; border:1px solid #e6e9f2; border-radius: 12px; background:#fafbff; }
-    .opt input { margin-top: 3px; }
-    .row { display:flex; gap:10px; flex-wrap: wrap; align-items:center; }
-    button {
-      border: 0; border-radius: 12px; padding: 11px 14px; font-size: 15px; cursor:pointer;
-      background:#111; color:#fff;
+
+    *{ box-sizing: border-box; }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      min-height:100vh;
+      background:
+        radial-gradient(1200px 800px at 10% 12%, rgba(255,215,0,.26), transparent 55%),
+        radial-gradient(900px 700px at 92% 18%, rgba(0,255,255,.16), transparent 55%),
+        radial-gradient(900px 700px at 25% 92%, rgba(255,0,128,.16), transparent 55%),
+        radial-gradient(900px 700px at 70% 85%, rgba(120,255,0,.10), transparent 55%),
+        linear-gradient(135deg, #0b1020 0%, #111a33 35%, #1a1140 70%, #0c1b2f 100%);
     }
-    button.secondary { background:#eef1fb; color:#111; }
-    button.ghost { background:transparent; color:#111; border:1px solid #d7dbe6; }
-    .pill { display:inline-block; padding: 6px 10px; border-radius: 999px; background:#eef1fb; font-size: 13px; }
-    .warn { color:#8a2b2b; background:#ffecec; border:1px solid #ffd1d1; padding: 10px; border-radius: 12px; }
-    .ok { color:#135b2c; background:#eafff0; border:1px solid #c8f3d4; padding: 10px; border-radius: 12px; }
-    .resultBox { white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; font-size: 13px; background:#0b1020; color:#d9e2ff; padding: 14px; border-radius: 12px; }
-    .small { font-size: 12px; }
-    a { color: #1b46ff; }
-    <style>
-  /* JARKA PODLOGA + “premium” osjećaj */
-  body{
-    margin:0;
-    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    background:
-      radial-gradient(1200px 800px at 10% 10%, rgba(255, 215, 0, .35), transparent 55%),
-      radial-gradient(900px 700px at 90% 20%, rgba(0, 255, 255, .18), transparent 55%),
-      radial-gradient(900px 700px at 30% 90%, rgba(255, 0, 128, .18), transparent 55%),
-      linear-gradient(135deg, #0b1020 0%, #111a33 35%, #1a1140 70%, #0c1b2f 100%);
-    min-height:100vh;
-  }
 
-  /* Kartica da sadržaj “sjedi” čisto */
-  .card{
-    background: rgba(255,255,255,.08);
-    border: 1px solid rgba(255,255,255,.12);
-    backdrop-filter: blur(10px);
-    border-radius: 18px;
-    box-shadow: 0 18px 45px rgba(0,0,0,.35);
-    padding: 18px;
-  }
+    a{ color: #9fd1ff; }
+    .wrap{ max-width: 980px; margin: 0 auto; padding: 18px; }
 
-  /* 3D BUTTON baza */
-  .btn{
-    border: 0;
-    cursor: pointer;
-    border-radius: 14px;
-    padding: 12px 16px;
-    font-weight: 800;
-    letter-spacing: .2px;
-    text-transform: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    user-select: none;
+    .hero{
+      display:flex; align-items:flex-start; justify-content:space-between; gap: 14px;
+      padding: 16px 0 8px;
+    }
+    .title{
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: .2px;
+      margin: 0;
+    }
+    .subtitle{
+      margin: 6px 0 0;
+      color: var(--muted);
+      line-height: 1.4;
+      max-width: 62ch;
+    }
 
-    /* 3D efekt */
-    transform: translateY(0);
-    box-shadow:
-      0 10px 0 rgba(0,0,0,.35),
-      0 18px 35px rgba(0,0,0,.35);
-    transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
-  }
+    .card{
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(10px);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+      margin: 14px 0;
+    }
 
-  .btn:hover{ filter: brightness(1.06); }
-  .btn:active{
-    transform: translateY(7px);
-    box-shadow:
-      0 3px 0 rgba(0,0,0,.35),
-      0 10px 18px rgba(0,0,0,.35);
-  }
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    @media (min-width: 860px){
+      .grid.two{ grid-template-columns: 1fr 1fr; }
+    }
 
-  /* “ZLATNI” (kandidat prolazi prag) */
-  .btn-gold{
-    color: #1b1400;
-    background: linear-gradient(180deg, #fff1a8 0%, #ffd24d 40%, #f5b300 100%);
-    border: 1px solid rgba(255,255,255,.35);
-  }
+    label{ display:block; font-weight: 800; margin-bottom: 6px; }
+    .hint{ color: var(--muted); font-size: 13px; margin-top: 6px; }
 
-  /* “ZELENI” (ne prolazi prag) — ti si rekao “nezrelo” */
-  .btn-green{
-    color: #041a07;
-    background: linear-gradient(180deg, #c7ffb6 0%, #52e07f 45%, #16b45c 100%);
-    border: 1px solid rgba(255,255,255,.30);
-  }
+    input[type="text"], input[type="email"], input[type="tel"], input[type="number"], textarea, select{
+      width: 100%;
+      padding: 11px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.25);
+      color: var(--text);
+      outline: none;
+    }
+    input::placeholder, textarea::placeholder{ color: rgba(255,255,255,.55); }
+    textarea{ min-height: 90px; resize: vertical; }
 
-  /* Neutralni/sekundarni gumb */
-  .btn-ghost{
-    color: rgba(255,255,255,.92);
-    background: linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.08));
-    border: 1px solid rgba(255,255,255,.18);
-  }
+    .q{
+      padding: 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.20);
+    }
+    .qtitle{ font-weight: 900; margin:0 0 10px; }
+    .opts{ display:grid; gap: 8px; }
+    .opt{
+      display:flex; align-items:flex-start; gap: 10px;
+      padding: 10px 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+    }
+    .opt input{ margin-top: 3px; }
 
-  .btn-row{
-    display:flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 12px;
-  }
+    .resultBox{
+      background: rgba(0,0,0,.55);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 16px;
+      padding: 14px;
+      overflow:auto;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: 13px;
+      line-height: 1.35;
+    }
 
-  /* Sažetak / pre */
-  pre, .summary-box{
-    background: rgba(0,0,0,.45);
-    color: rgba(255,255,255,.92);
-    border: 1px solid rgba(255,255,255,.12);
-    border-radius: 14px;
-    padding: 14px;
-    overflow:auto;
-  }
-</style>
+    .pill{
+      display:inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.08);
+      font-size: 13px;
+      color: var(--muted);
+    }
 
+    /* 3D buttons */
+    .btn-row{ display:flex; flex-wrap:wrap; gap: 10px; margin-top: 12px; }
+    .btn{
+      border: 0;
+      cursor: pointer;
+      border-radius: 14px;
+      padding: 12px 16px;
+      font-weight: 900;
+      letter-spacing: .2px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      user-select: none;
+
+      transform: translateY(0);
+      box-shadow:
+        0 10px 0 rgba(0,0,0,.40),
+        0 18px 35px rgba(0,0,0,.40);
+      transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+    }
+    .btn:hover{ filter: brightness(1.06); }
+    .btn:active{
+      transform: translateY(7px);
+      box-shadow:
+        0 3px 0 rgba(0,0,0,.40),
+        0 10px 18px rgba(0,0,0,.40);
+    }
+    .btn-ghost{
+      color: rgba(255,255,255,.92);
+      background: linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.08));
+      border: 1px solid rgba(255,255,255,.18);
+    }
+    .btn-gold{
+      color: #1b1400;
+      background: linear-gradient(180deg, #fff1a8 0%, #ffd24d 40%, #f5b300 100%);
+      border: 1px solid rgba(255,255,255,.35);
+    }
+    .btn-green{
+      color: #041a07;
+      background: linear-gradient(180deg, #c7ffb6 0%, #52e07f 45%, #16b45c 100%);
+      border: 1px solid rgba(255,255,255,.30);
+    }
+
+    .note{
+      color: rgba(255,255,255,.70);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .okBox{
+      margin-top: 10px;
+      border-radius: 16px;
+      padding: 12px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.20);
+    }
+    .okLine{ margin:0; line-height: 1.45; }
   </style>
 </head>
+
 <body>
   <div class="wrap">
-    <div class="card">
-      <h1>Novalus Prime – upitnik kompatibilnosti (12 pitanja)</h1>
-      <p class="muted">
-        Nema točnih i netočnih odgovora. Cilj je procijeniti koliko je ovaj model kompatibilan s vašom trenutnom situacijom.
-        Ispod mentor upisuje svoj ID (obavezno) i kontakt (opcionalno).
-      </p>
 
+    <div class="hero">
+      <div>
+        <h1 class="title">Novalus Prime – Upitnik kompatibilnosti</h1>
+        <p class="subtitle">
+          Kandidat popunjava, sustav izračuna bodove i pripremi sažetak.
+          Mentor dobiva sažetak kopiranjem / emailom / WhatsAppom / Telegramom.
+        </p>
+      </div>
+      <div class="pill" id="statusPill">Spreman za ispunjavanje</div>
+    </div>
+
+    <div class="card">
+      <h2 style="margin:0 0 10px;">Podaci mentora (preporučitelja)</h2>
       <div class="grid two">
         <div>
-          <label for="mentorId"><b>Mentorov Novalus Prime ID (8 znamenki) – obavezno</b></label>
-          <input id="mentorId" type="text" inputmode="numeric" maxlength="8" placeholder="npr. 12345678" />
-          <div class="muted small">Ovaj ID će se automatski umetnuti u invite link ako kandidat zadovolji bodovni prag.</div>
+          <label for="mentorId">Mentor ID (za invite link)</label>
+          <input id="mentorId" name="mentorId" type="text" placeholder="npr. 43914344" />
+          <div class="hint">Od ovoga se gradi Novalus invite link.</div>
         </div>
         <div>
-          <label for="threshold"><b>Bodovni prag za prikaz invite linka</b></label>
-          <select id="threshold">
-            <option value="120">120 bodova (preporučeno – umjereno)</option>
-            <option value="150">150 bodova (strože)</option>
-            <option value="100">100 bodova (blaže)</option>
-          </select>
-          <div class="muted small">Možeš promijeniti prag ovisno o strategiji selekcije.</div>
+          <label for="mentorEmail">Email mentora</label>
+          <input id="mentorEmail" name="mentorEmail" type="email" placeholder="mentor@email.com" />
+          <div class="hint">Na ovaj email ćeš ručno poslati sažetak (1 klik).</div>
+        </div>
+        <div>
+          <label for="mentorPhone">Telefon mentora (za WhatsApp)</label>
+          <input id="mentorPhone" name="mentorPhone" type="tel" placeholder="+385..." />
+          <div class="hint">Format: +385... (WhatsApp radi najbolje s punim brojem).</div>
+        </div>
+        <div>
+          <label for="candidateName">Ime kandidata</label>
+          <input id="candidateName" name="candidateName" type="text" placeholder="Ime i prezime (opcionalno)" />
+          <div class="hint">Ako ne upiše, u sažetku će pisati “Kandidat”.</div>
         </div>
       </div>
+    </div>
+
+    <form id="quizForm" class="card">
+      <h2 style="margin:0 0 10px;">Pitanja (boduje se 1–9)</h2>
+      <p class="note" style="margin-top:0;">
+        Odgovori su namjerno jednostavni – poanta je brz profil kandidata.
+      </p>
+
+      <!-- 1 -->
+      <div class="q">
+        <p class="qtitle">1) MLM stav</p>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="q1" value="25" required> a) Korektan oblik poduzetništva</label>
+          <label class="opt"><input type="radio" name="q1" value="15"> b) Može biti dobar uz oprez</label>
+          <label class="opt"><input type="radio" name="q1" value="5"> c) Ne vjerujem u to</label>
+          <label class="opt"><input type="radio" name="q1" value="0"> d) Negativan stav</label>
+        </div>
+      </div>
+
+      <!-- 2 -->
+      <div class="q">
+        <p class="qtitle">2) Nagrade/prihodi ovise o</p>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="q2" value="25" required> a) Ovisi o paketu</label>
+          <label class="opt"><input type="radio" name="q2" value="20"> b) Ovisi o aktivnosti i produkciji strukture</label>
+          <label class="opt"><input type="radio" name="q2" value="10"> c) Sreći / okolnostima</label>
+          <label class="opt"><input type="radio" name="q2" value="0"> d) Ne znam</label>
+        </div>
+      </div>
+
+      <!-- 3 -->
+      <div class="q">
+        <p class="qtitle">3) Vrijeme tjedno koje može izdvojiti</p>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="q3" value="25" required> a) 10+ sati</label>
+          <label class="opt"><input type="radio" name="q3" value="18"> b) 6–9 sati</label>
+          <label class="opt"><input type="radio" name="q3" value="10"> c) 3–5 sati</label>
+          <label class="opt"><input type="radio" name="q3" value="0"> d) < 3 sata</label>
+        </div>
+      </div>
+
+      <!-- 4 -->
+      <div class="q">
+        <p class="qtitle">4) Učenje vještina</p>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="q4" value="25" required> a) Učenje je nužno</label>
+          <label class="opt"><input type="radio" name="q4" value="12"> b) Učio bih usput</label>
+          <label class="opt"><input type="radio" name="q4" value="0"> c) Ne volim učiti</label>
+        </div>
+      </div>
+
+      <!-- 5 -->
+      <div class="q">
+        <p class="qtitle">5) Dugoročni rezultati</p>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="q5" value="25" required> a) Dugoročno prirodno</label>
+          <label class="opt"><input type="radio" name="q5" value="12"> b) Možda, ali nisam siguran</label>
+          <label class="opt"><input type="radio" name="q5" value="0"> c) Ne vjerujem u dugoročno</label>
+        </div>
+      </div>
+
+      <!-- 6 -->
+      <div class="q">
+        <p class="qtitle">6) Važnost jasnog objašnjenja</p>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="q6" value="25" required> a) Jako važno</label>
+          <label class="opt"><input type="radio" name="q6" value="12"> b) Djelomično</label>
+          <label class="opt"><input type="radio" name="q6" value="0"> c) Nije bitno</label>
+        </div>
+      </div>
+
+      <!-- 7 -->
+      <div class="q">
+        <p class="qtitle">7) Spremnost na plan 30 dana</p>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="q7" value="25" required> a) Volim plan</label>
+          <label class="opt"><input type="radio" name="q7" value="12"> b) Može, ali fleksibilno</label>
+          <label class="opt"><input type="radio" name="q7" value="0"> c) Ne volim planove</label>
+        </div>
+      </div>
+
+      <!-- 8 -->
+      <div class="q">
+        <p class="qtitle">8) Razgovor s ljudima</p>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="q8" value="25" required> a) Prirodno mi je</label>
+          <label class="opt"><input type="radio" name="q8" value="12"> b) Mogu uz vježbu</label>
+          <label class="opt"><input type="radio" name="q8" value="0"> c) Ne želim razgovarati</label>
+        </div>
+      </div>
+
+      <!-- 9 -->
+      <div class="q">
+        <p class="qtitle">9) Financijski okvir</p>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="q9" value="25" required> a) Spreman uložiti pametno</label>
+          <label class="opt"><input type="radio" name="q9" value="12"> b) Samo minimalno</label>
+          <label class="opt"><input type="radio" name="q9" value="0"> c) Nema mogućnosti</label>
+        </div>
+      </div>
+
+      <h2 style="margin:16px 0 10px;">Interes (bez bodova)</h2>
 
       <div class="grid two">
-        <div>
-          <label for="mentorEmail">Mentor email (opcionalno, za “Pošalji rezultate”)</label>
-          <input id="mentorEmail" type="email" placeholder="mentor@email.com" />
-        </div>
-        <div>
-          <label for="mentorPhone">Mentor mobitel (opcionalno, za SMS na mobitelu)</label>
-          <input id="mentorPhone" type="tel" placeholder="+385..." />
-        </div>
-      </div>
-
-      <div id="topMsg" class="muted" style="margin-top:10px;"></div>
-    </div>
-
-    <div class="card">
-      <h2>Odgovori kandidata</h2>
-      <p class="muted">Pitanja 1–9 su bodovana. Pitanja 10–12 su informativna (bez bodova).</p>
-
-      <!-- Q1 -->
-      <div class="q" data-q="q1">
-        <label><b>1) Kako danas gledate na MLM (network marketing) poslovanje?</b></label>
-        <div class="opts">
-          <label class="opt"><input type="radio" name="q1" value="15"> a) Smatram ga korektnim oblikom poduzetništva (+15)</label>
-          <label class="opt"><input type="radio" name="q1" value="0"> b) Smatram ga nekorektnim poslovanjem (+0)</label>
-          <label class="opt"><input type="radio" name="q1" value="20"> c) Korektan je ako se nudi stvarna vrijednost kupcu (+20)</label>
-          <label class="opt"><input type="radio" name="q1" value="-5"> d) Ne zanima me (−5)</label>
-          <div class="card" style="padding:12px; background:#fafbff; border:1px solid #e6e9f2;">
-            <div class="row" style="justify-content:space-between;">
-              <div class="pill">e) Nešto drugo (ručno, bez bodovanja)</div>
-              <div class="muted small">Ako upišete odgovor, bodovi ostaju iz odabrane opcije.</div>
-            </div>
-            <textarea id="q1_text" placeholder="Do 3 rečenice..."></textarea>
+        <div class="q">
+          <p class="qtitle">10) Što dalje želi?</p>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="i10" value="Kratki video" required> Kratki video</label>
+            <label class="opt"><input type="radio" name="i10" value="Zoom poziv"> Zoom poziv</label>
+            <label class="opt"><input type="radio" name="i10" value="Zasad ništa"> Zasad ništa</label>
           </div>
         </div>
-      </div>
 
-      <!-- Q2 -->
-      <div class="q" data-q="q2">
-        <label><b>2) O čemu, po vašem mišljenju, ovise nagrade i prihodi u ovom modelu?</b></label>
-        <div class="opts">
-          <label class="opt"><input type="radio" name="q2" value="5"> a) Prvenstveno o visini kupljenog paketa (+5)</label>
-          <label class="opt"><input type="radio" name="q2" value="20"> b) O osobnoj aktivnosti i ukupnoj produkciji strukture (+20)</label>
-          <label class="opt"><input type="radio" name="q2" value="0"> c) Ne ovise ni o jednom od navedenog (+0)</label>
-          <label class="opt"><input type="radio" name="q2" value="0"> d) Ne zanima me (bez bodova; obrazloženje ispod)</label>
-        </div>
-        <label class="muted">Ako ste odabrali d), napišite kratko zašto (opcionalno):</label>
-        <textarea id="q2_text" placeholder="Do 3 rečenice..."></textarea>
-      </div>
-
-      <!-- Q3 -->
-      <div class="q" data-q="q3">
-        <label><b>3) Koliko realno vremena tjedno možete posvetiti učenju i razvoju?</b></label>
-        <div class="opts">
-          <label class="opt"><input type="radio" name="q3" value="5"> a) Manje od 2 sata (+5)</label>
-          <label class="opt"><input type="radio" name="q3" value="10"> b) 2–5 sati (+10)</label>
-          <label class="opt"><input type="radio" name="q3" value="15"> c) 5–10 sati (+15)</label>
-          <label class="opt"><input type="radio" name="q3" value="20"> d) Više od 10 sati (+20)</label>
-        </div>
-      </div>
-
-      <!-- Q4 -->
-      <div class="q" data-q="q4">
-        <label><b>4) Kako se odnosite prema učenju novih vještina (komunikacija, alati, sustav rada)?</b></label>
-        <div class="opts">
-          <label class="opt"><input type="radio" name="q4" value="0"> a) Ne volim učiti nove stvari (+0)</label>
-          <label class="opt"><input type="radio" name="q4" value="5"> b) Učim samo ako baš moram (+5)</label>
-          <label class="opt"><input type="radio" name="q4" value="15"> c) Spreman sam učiti uz jasne upute i podršku (+15)</label>
-          <label class="opt"><input type="radio" name="q4" value="20"> d) Učenje je nužan dio rasta (+20)</label>
-        </div>
-      </div>
-
-      <!-- Q5 -->
-      <div class="q" data-q="q5">
-        <label><b>5) Kako gledate na rezultate u poslovima koji nemaju brzu garanciju uspjeha?</b></label>
-        <div class="opts">
-          <label class="opt"><input type="radio" name="q5" value="0"> a) Ne zanimaju me poslovi bez brzog povrata (+0)</label>
-          <label class="opt"><input type="radio" name="q5" value="5"> b) Spreman sam pokušati kratko (+5)</label>
-          <label class="opt"><input type="radio" name="q5" value="15"> c) Razumijem da rezultati traže dosljednost (+15)</label>
-          <label class="opt"><input type="radio" name="q5" value="20"> d) Dugoročno razmišljanje mi je prirodno (+20)</label>
-        </div>
-      </div>
-
-      <!-- Q6 -->
-      <div class="q" data-q="q6">
-        <label><b>6) Koliko vam je važno da sve bude jasno objašnjeno prije bilo kakve odluke?</b></label>
-        <div class="opts">
-          <label class="opt"><input type="radio" name="q6" value="0"> a) Nije mi važno, odlučujem impulsivno (+0)</label>
-          <label class="opt"><input type="radio" name="q6" value="10"> b) Važno mi je djelomično (+10)</label>
-          <label class="opt"><input type="radio" name="q6" value="20"> c) Jako mi je važno – volim razumjeti stvari (+20)</label>
-          <label class="opt"><input type="radio" name="q6" value="15"> d) Važno mi je, ali ne želim previše detalja (+15)</label>
-        </div>
-      </div>
-
-      <!-- Q7 -->
-      <div class="q" data-q="q7">
-        <label><b>7) Koliko ste spremni pratiti dogovoreni plan aktivnosti (npr. 30 dana) prije procjene rezultata?</b></label>
-        <div class="opts">
-          <label class="opt"><input type="radio" name="q7" value="0"> a) Nisam spreman/na na plan, želim slobodno (+0)</label>
-          <label class="opt"><input type="radio" name="q7" value="10"> b) Spreman/na sam djelomično (+10)</label>
-          <label class="opt"><input type="radio" name="q7" value="15"> c) Spreman/na sam ako je plan realan (+15)</label>
-          <label class="opt"><input type="radio" name="q7" value="20"> d) Volim plan i dosljednost (+20)</label>
-        </div>
-      </div>
-
-      <!-- Q8 -->
-      <div class="q" data-q="q8">
-        <label><b>8) Kako se osjećate oko razgovora s ljudima (preporuka, poziv, predstavljanje ideje)?</b></label>
-        <div class="opts">
-          <label class="opt"><input type="radio" name="q8" value="0"> a) Ne želim razgovarati s ljudima o poslu (+0)</label>
-          <label class="opt"><input type="radio" name="q8" value="10"> b) Mogu, ali teško mi je (+10)</label>
-          <label class="opt"><input type="radio" name="q8" value="15"> c) Mogu uz upute i skriptu (+15)</label>
-          <label class="opt"><input type="radio" name="q8" value="20"> d) To mi je prirodno (+20)</label>
-        </div>
-      </div>
-
-      <!-- Q9 -->
-      <div class="q" data-q="q9">
-        <label><b>9) Ako procijenite da vam model odgovara, s kojim biste se financijskim rasponom osjećali ugodno za početak?</b></label>
-        <div class="opts">
-          <label class="opt"><input type="radio" name="q9" value="0"> a) Ne bih ulagao, samo bih pratio i učio (+0)</label>
-          <label class="opt"><input type="radio" name="q9" value="10"> b) Manji testni iznos (+10)</label>
-          <label class="opt"><input type="radio" name="q9" value="15"> c) Srednji iznos uz jasan plan (+15)</label>
-          <label class="opt"><input type="radio" name="q9" value="20"> d) Spreman/na sam za ozbiljniji početak (+20)</label>
-          <div class="card" style="padding:12px; background:#fafbff; border:1px solid #e6e9f2;">
-            <div class="row" style="justify-content:space-between;">
-              <div class="pill">e) Ovisi o planu (opcionalno)</div>
-            </div>
-            <textarea id="q9_text" placeholder="Kratko objasnite..."></textarea>
+        <div class="q">
+          <p class="qtitle">11) Tombola / webinar</p>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="i11" value="Prisustvovati i sudjelovati" required> Prisustvovati i sudjelovati</label>
+            <label class="opt"><input type="radio" name="i11" value="Možda kasnije"> Možda kasnije</label>
+            <label class="opt"><input type="radio" name="i11" value="Ne zanima"> Ne zanima</label>
           </div>
         </div>
-      </div>
 
-      <!-- Q10 (info) -->
-      <div class="q" data-q="q10">
-        <label><b>10) Nakon ispunjavanja upitnika, što biste željeli dalje?</b> <span class="muted">(bez bodova)</span></label>
-        <div class="opts">
-          <label class="opt"><input type="radio" name="q10" value="video"> a) Kratki informativni video (3–5 min)</label>
-          <label class="opt"><input type="radio" name="q10" value="call"> b) Individualno objašnjenje</label>
-          <label class="opt"><input type="radio" name="q10" value="nothing"> c) Zasad ništa</label>
-        </div>
-      </div>
-
-      <!-- Q11 (info) -->
-      <div class="q" data-q="q11">
-        <label><b>11) Trenutno je u tijeku besplatna tombola. Želite li:</b> <span class="muted">(bez bodova)</span></label>
-        <div class="opts">
-          <label class="opt"><input type="radio" name="q11" value="join"> a) Prisustvovati i sudjelovati</label>
-          <label class="opt"><input type="radio" name="q11" value="watch"> b) Samo prisustvovati</label>
-          <label class="opt"><input type="radio" name="q11" value="no"> c) Ne ovaj put</label>
-        </div>
-      </div>
-
-      <!-- Q12 (optional referral info) -->
-      <div class="q" data-q="q12">
-        <label><b>12) Opcionalno: ako mislite da ovo nije za vas, imate li osobu kojoj bi moglo biti zanimljivo?</b> <span class="muted">(bez bodova)</span></label>
-        <div class="opts">
-          <label class="opt"><input type="radio" name="q12" value="no"> a) Ne</label>
-          <label class="opt"><input type="radio" name="q12" value="yes"> b) Da (ispunite kontakt ispod)</label>
-        </div>
-
-        <div id="refBox" class="card" style="display:none; padding:12px; background:#fafbff; border:1px solid #e6e9f2;">
-          <div class="grid two">
-            <div>
-              <label for="refName">Ime i prezime</label>
-              <input id="refName" type="text" placeholder="Ime Prezime" />
-            </div>
-            <div>
-              <label for="refGender">Spol</label>
-              <select id="refGender">
-                <option value="">—</option>
-                <option value="M">M</option>
-                <option value="Ž">Ž</option>
-                <option value="Drugo">Drugo</option>
-              </select>
-            </div>
-            <div>
-              <label for="refPhone">Mobitel</label>
-              <input id="refPhone" type="tel" placeholder="+385..." />
-            </div>
-            <div>
-              <label for="refEmail">Email</label>
-              <input id="refEmail" type="email" placeholder="osoba@email.com" />
-            </div>
+        <div class="q">
+          <p class="qtitle">12) Preporuka druge osobe</p>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="i12" value="Da" required> Da</label>
+            <label class="opt"><input type="radio" name="i12" value="Ne"> Ne</label>
           </div>
-          <label for="refRelation">Odnos (prijatelj/kolega/obitelj)</label>
-          <input id="refRelation" type="text" placeholder="npr. kolega s posla" />
+        </div>
+
+        <div class="q">
+          <p class="qtitle">Napomena kandidata (opcionalno)</p>
+          <textarea id="candidateNote" name="candidateNote" placeholder="Možeš dodati svoj komentar, pitanje ili situaciju..."></textarea>
         </div>
       </div>
 
-      <div class="row" style="margin-top:16px;">
-        <button id="calcBtn">Izračunaj rezultat</button>
-        <button id="resetBtn" class="secondary" type="button">Reset</button>
+      <div class="btn-row" style="margin-top:14px;">
+        <button class="btn btn-ghost" type="submit">✅ Izračunaj rezultat</button>
+        <button class="btn btn-ghost" type="button" id="btnReset">↩ Reset</button>
+      </div>
+    </form>
+
+    <div class="card" id="resultCard" style="display:none;">
+      <h2 style="margin:0 0 10px;">Rezultat</h2>
+
+      <div class="okBox">
+        <p class="okLine" id="scoreLine"></p>
+        <p class="okLine" id="rangeLine"></p>
+        <p class="okLine" id="passLine"></p>
       </div>
 
-      <div id="msg" style="margin-top:12px;"></div>
-      <div id="resultArea" style="display:none; margin-top:12px;">
-        <div class="card">
-          <h2>Rezultat</h2>
-          <div id="scoreLine" class="pill"></div>
-          <div id="levelLine" style="margin-top:10px;"></div>
-
-          <div id="inviteBox" style="display:none; margin-top:12px;"></div>
-
-          <h2 style="margin-top:14px;">Sažetak (za mentora)</h2>
-          <div id="resultText" class="resultBox"></div>
-
-          <div class="row" style="margin-top:12px;">
-            <button id="copyBtn" class="ghost" type="button">Kopiraj rezultate</button>
-            <button id="emailBtn" class="ghost" type="button">Pošalji email mentoru</button>
-            <button id="smsBtn" class="ghost" type="button">Pošalji SMS mentoru</button>
-          </div>
-          <p class="muted small" style="margin-top:10px;">
-            * Email/SMS gumbi otvaraju vaš uređaj (mail/SMS aplikaciju) s već pripremljenim tekstom. Bez servera se ne može slati automatski.
-          </p>
-        </div>
+      <div class="okBox" style="margin-top:10px;">
+        <p class="okLine"><strong>Invite link (mentor):</strong> <a href="#" id="inviteLink" target="_blank" rel="noopener noreferrer">—</a></p>
       </div>
-    </div>
 
-    <div class="card">
-      <p class="muted small">
-        Privatnost: Ovaj upitnik ne šalje podatke nikamo sam od sebe. Sve ostaje u pregledniku dok kandidat ručno ne pošalje/prekopa sažetak.
+      <h3 style="margin:14px 0 8px;">Sažetak (za mentora)</h3>
+      <div class="resultBox" id="mentorSummary"></div>
+
+      <div class="btn-row">
+        <button id="btnCopy" class="btn btn-ghost" type="button">📋 Kopiraj rezultate</button>
+        <button id="btnEmail" class="btn btn-ghost" type="button">✉️ Pošalji email mentoru</button>
+        <button id="btnWA" class="btn btn-ghost" type="button">🟢 WhatsApp mentoru</button>
+        <button id="btnTG" class="btn btn-ghost" type="button">📨 Telegram mentoru</button>
+      </div>
+
+      <p class="note" style="margin-top:12px;">
+        Privatnost: ovaj upitnik ne šalje podatke nikamo sam od sebe. Sve ostaje u pregledniku dok mentor ručno ne pošalje sažetak.
       </p>
     </div>
+
   </div>
 
-<script>
-(function(){
-  const mentorIdEl = document.getElementById('mentorId');
-  const mentorEmailEl = document.getElementById('mentorEmail');
-  const mentorPhoneEl = document.getElementById('mentorPhone');
-  const thresholdEl = document.getElementById('threshold');
-  const msgEl = document.getElementById('msg');
-  const resultArea = document.getElementById('resultArea');
-  const scoreLine = document.getElementById('scoreLine');
-  const levelLine = document.getElementById('levelLine');
-  const inviteBox = document.getElementById('inviteBox');
-  const resultText = document.getElementById('resultText');
-  const refBox = document.getElementById('refBox');
+  <script>
+    // ===== POSTAVKE =====
+    const PASS_THRESHOLD = 120; // prag bodova
+    const ranges = [
+      { min: 151, max: 220, label: "151–220: vrlo dobra kompatibilnost", rec: "Preporuka: uključivanje uz mentorstvo i konkretne korake." },
+      { min: 81,  max: 150, label: "81–150: potencijal postoji",       rec: "Preporuka: sporiji tempo, jasna očekivanja, dogovor oko plana." },
+      { min: 0,   max: 80,  label: "0–80: trenutno nezrelo",           rec: "Preporuka: edukacija i pauza; bez pritiska." }
+    ];
 
-  const calcBtn = document.getElementById('calcBtn');
-  const resetBtn = document.getElementById('resetBtn');
-  const copyBtn = document.getElementById('copyBtn');
-  const emailBtn = document.getElementById('emailBtn');
-  const smsBtn = document.getElementById('smsBtn');
+    // ===== DOM =====
+    const quizForm = document.getElementById("quizForm");
+    const resultCard = document.getElementById("resultCard");
+    const mentorSummaryEl = document.getElementById("mentorSummary");
+    const statusPill = document.getElementById("statusPill");
 
-  // Show/hide referral fields
-  document.querySelectorAll('input[name="q12"]').forEach(r => {
-    r.addEventListener('change', () => {
-      refBox.style.display = (getRadioValue('q12') === 'yes') ? 'block' : 'none';
-    });
-  });
+    const mentorIdEl = document.getElementById("mentorId");
+    const mentorEmailEl = document.getElementById("mentorEmail");
+    const mentorPhoneEl = document.getElementById("mentorPhone");
+    const candidateNameEl = document.getElementById("candidateName");
+    const inviteLinkEl = document.getElementById("inviteLink");
 
-  function sanitizeId(raw){
-    return (raw || '').replace(/\D/g, '').slice(0,8);
-  }
+    const scoreLine = document.getElementById("scoreLine");
+    const rangeLine = document.getElementById("rangeLine");
+    const passLine  = document.getElementById("passLine");
 
-  function getRadioValue(name){
-    const el = document.querySelector(`input[name="${name}"]:checked`);
-    return el ? el.value : null;
-  }
+    const btnReset = document.getElementById("btnReset");
+    const btnCopy  = document.getElementById("btnCopy");
+    const btnEmail = document.getElementById("btnEmail");
+    const btnWA    = document.getElementById("btnWA");
+    const btnTG    = document.getElementById("btnTG");
 
-  function mustHaveMentorId(){
-    const id = sanitizeId(mentorIdEl.value);
-    mentorIdEl.value = id;
-    if(id.length !== 8){
-      showMsg('Upiši mentorov Novalus Prime ID od točno 8 znamenki na vrhu.', 'warn');
-      return null;
+    function safeText(v){ return (v ?? "").toString().trim(); }
+
+    function getCandidateName(){
+      return safeText(candidateNameEl.value) || "Kandidat";
     }
-    return id;
-  }
 
-  function showMsg(text, type){
-    msgEl.innerHTML = `<div class="${type === 'ok' ? 'ok' : 'warn'}">${escapeHtml(text)}</div>`;
-  }
+    function buildInviteLink(){
+      const mentorId = safeText(mentorIdEl.value);
+      if(!mentorId) return "";
+      return `https://novalusprime.com/Invite/${encodeURIComponent(mentorId)}`;
+    }
 
-  function escapeHtml(s){
-    return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
-  }
-
-  function sumScore(){
-    // q1..q9 are scored (radio values numeric)
-    let total = 0;
-    const missing = [];
-
-    for(let i=1;i<=9;i++){
-      const v = getRadioValue('q'+i);
-      if(v === null){
-        missing.push(i);
-        continue;
+    function calcScore(){
+      const fd = new FormData(quizForm);
+      let sum = 0;
+      for(let i=1;i<=9;i++){
+        const v = fd.get(`q${i}`);
+        sum += Number(v || 0);
       }
-      total += Number(v);
-    }
-    return { total, missing };
-  }
-
-  function interpretScore(score){
-    if(score <= 80){
-      return { label: '0–80: trenutno nije pravi trenutak', note: 'Preporuka: edukacija bez pritiska, pa ponovna procjena kasnije.' };
-    }
-    if(score <= 150){
-      return { label: '81–150: potencijal postoji', note: 'Preporuka: sporiji tempo, jasna očekivanja, dogovor oko plana.' };
-    }
-    if(score <= 220){
-      return { label: '151–220: vrlo dobra kompatibilnost', note: 'Preporuka: uključivanje uz mentorstvo i konkretne korake.' };
-    }
-    return { label: '220+: visok potencijal', note: 'Preporuka: brži razvoj, veća odgovornost i fokus na dosljednost.' };
-  }
-
-  function buildSummary(mentorId, score, interpretation){
-    const q = (n) => {
-      const v = getRadioValue('q'+n);
-      if(v === null) return '—';
-      // Provide readable option text for each question
-      const map = optionTextMap['q'+n] || {};
-      return map[v] || map[String(v)] || v;
-    };
-
-    const free1 = document.getElementById('q1_text').value.trim();
-    const free2 = document.getElementById('q2_text').value.trim();
-    const free9 = document.getElementById('q9_text').value.trim();
-
-    const q10 = readable('q10', getRadioValue('q10'));
-    const q11 = readable('q11', getRadioValue('q11'));
-    const q12 = readable('q12', getRadioValue('q12'));
-
-    let referral = '';
-    if(getRadioValue('q12') === 'yes'){
-      const refName = document.getElementById('refName').value.trim();
-      const refGender = document.getElementById('refGender').value.trim();
-      const refPhone = document.getElementById('refPhone').value.trim();
-      const refEmail = document.getElementById('refEmail').value.trim();
-      const refRelation = document.getElementById('refRelation').value.trim();
-
-      referral =
-`PREPORUKA (opcionalno):
-- Ime: ${refName || '—'}
-- Spol: ${refGender || '—'}
-- Mobitel: ${refPhone || '—'}
-- Email: ${refEmail || '—'}
-- Odnos: ${refRelation || '—'}
-`;
+      return sum;
     }
 
-    const invite = `https://novalusprime.com/Invite/${mentorId}`;
+    function getRange(score){
+      // našli smo range u kojem je score
+      let r = ranges.find(x => score >= x.min && score <= x.max);
+      // fallback
+      if(!r) r = ranges[ranges.length - 1];
+      return r;
+    }
 
-    return (
+    function getAnswerText(){
+      // za sažetak: ispiši odgovore (a/b/c/d) po pitanju
+      const fd = new FormData(quizForm);
+      const answers = [];
+
+      function pickLabel(name){
+        const checked = quizForm.querySelector(`input[name="${name}"]:checked`);
+        if(!checked) return "-";
+        // uzmi tekst labela (bez inputa)
+        const lbl = checked.closest("label");
+        return lbl ? lbl.textContent.trim() : checked.value;
+      }
+
+      for(let i=1;i<=9;i++){
+        answers.push(`${i}) ${pickLabel(`q${i}`)}`);
+      }
+      const i10 = pickLabel("i10");
+      const i11 = pickLabel("i11");
+      const i12 = pickLabel("i12");
+
+      return {
+        scored: answers.join("\n"),
+        interest:
+          `10) Dalje želi: ${i10}\n` +
+          `11) Tombola: ${i11}\n` +
+          `12) Preporuka druge osobe: ${i12}`
+      };
+    }
+
+    function paintShareButtons(score){
+      const passed = score >= PASS_THRESHOLD;
+      const cls = passed ? "btn-gold" : "btn-green";
+      [btnEmail, btnWA, btnTG].forEach(b=>{
+        b.classList.remove("btn-ghost","btn-gold","btn-green");
+        b.classList.add(cls);
+      });
+    }
+
+    function setInviteUI(){
+      const url = buildInviteLink();
+      if(url){
+        inviteLinkEl.href = url;
+        inviteLinkEl.textContent = url;
+      }else{
+        inviteLinkEl.href = "#";
+        inviteLinkEl.textContent = "— (upiši Mentor ID gore)";
+      }
+    }
+
+    function makeSummary(score){
+      const mentorId = safeText(mentorIdEl.value) || "(nije upisan)";
+      const mentorEmail = safeText(mentorEmailEl.value) || "(nije upisan)";
+      const mentorPhone = safeText(mentorPhoneEl.value) || "(nije upisan)";
+      const candidate = getCandidateName();
+
+      const r = getRange(score);
+      const passed = score >= PASS_THRESHOLD;
+
+      const { scored, interest } = getAnswerText();
+      const note = safeText(document.getElementById("candidateNote").value);
+
+      const invite = buildInviteLink() || "(upiši Mentor ID da se generira link)";
+
+      return (
 `NOVALUS PRIME – SAŽETAK UPITNIKA
 Mentor ID: ${mentorId}
+Mentor email: ${mentorEmail}
+Mentor telefon: ${mentorPhone}
+
+Kandidat: ${candidate}
 
 Bodovi: ${score}
-Procjena: ${interpretation.label}
-Napomena: ${interpretation.note}
+Procjena: ${r.label}
+Napomena: ${r.rec}
 
 ODGOVORI:
-1) MLM stav: ${q(1)}${free1 ? `\n   Dodatno: ${free1}` : ''}
-2) Nagrade/prihodi ovise o: ${q(2)}${free2 ? `\n   Dodatno: ${free2}` : ''}
-3) Vrijeme tjedno: ${q(3)}
-4) Učenje vještina: ${q(4)}
-5) Dugoročni rezultati: ${q(5)}
-6) Važnost jasnog objašnjenja: ${q(6)}
-7) Spremnost na plan 30 dana: ${q(7)}
-8) Razgovor s ljudima: ${q(8)}
-9) Financijski okvir: ${q(9)}${free9 ? `\n   Dodatno: ${free9}` : ''}
+${scored}
 
 INTERES (bez bodova):
-10) Dalje želi: ${q10}
-11) Tombola: ${q11}
-12) Preporuka druge osobe: ${q12}
+${interest}
 
-${referral ? referral + '\n' : ''}Invite link (ako kandidat želi): ${invite}
-`
-    );
-  }
+Napomena kandidata:
+${note || "-"}
 
-  function readable(qname, value){
-    const map = readableTextMap[qname] || {};
-    return map[value] || '—';
-  }
-
-  const optionTextMap = {
-    q1: {
-      "15":"a) Korektan oblik poduzetništva",
-      "0":"b) Nekorektan / ili nisam odabrao bodovnu opciju",
-      "20":"c) Korektan ako postoji stvarna vrijednost",
-      "-5":"d) Ne zanima me"
-    },
-    q2: {
-      "5":"a) Ovisi o paketu",
-      "20":"b) Ovisi o aktivnosti i produkciji strukture",
-      "0":"c/d) Ne ovise / ne zanima me"
-    },
-    q3: { "5":"a) <2h", "10":"b) 2–5h", "15":"c) 5–10h", "20":"d) >10h" },
-    q4: { "0":"a) Ne volim učiti", "5":"b) Ako baš moram", "15":"c) Uz upute", "20":"d) Učenje je nužno" },
-    q5: { "0":"a) Bez brzog povrata – ne", "5":"b) Kratko", "15":"c) Dosljednost", "20":"d) Dugoročno prirodno" },
-    q6: { "0":"a) Impulsivno", "10":"b) Djelomično", "20":"c) Jako važno", "15":"d) Važno, ali bez detalja" },
-    q7: { "0":"a) Ne volim plan", "10":"b) Djelomično", "15":"c) Ako je realan", "20":"d) Volim plan" },
-    q8: { "0":"a) Ne želim razgovarati", "10":"b) Teško mi je", "15":"c) Uz skriptu", "20":"d) Prirodno mi je" },
-    q9: { "0":"a) Ne bih ulagao", "10":"b) Manji testni", "15":"c) Srednji uz plan", "20":"d) Ozbiljan početak" }
-  };
-
-  const readableTextMap = {
-    q10: { video: "Kratki video", call: "Individualno objašnjenje", nothing: "Zasad ništa" },
-    q11: { join: "Prisustvovati i sudjelovati", watch: "Samo prisustvovati", no: "Ne ovaj put" },
-    q12: { yes: "Da", no: "Ne" }
-  };
-
-  function setInviteVisibility(mentorId, score){
-    const threshold = Number(thresholdEl.value);
-    if(score >= threshold){
-      const link = `https://novalusprime.com/Invite/${mentorId}`;
-      inviteBox.style.display = 'block';
-      inviteBox.innerHTML = `
-        <div class="ok">
-          <b>Kandidat zadovoljava bodovni prag (${threshold}).</b><br/>
-          Ako želi, može se učlaniti preko linka mentora:<br/>
-          <a href="${link}" target="_blank" rel="noopener noreferrer">${link}</a>
-        </div>
-      `;
-    } else {
-      inviteBox.style.display = 'block';
-      inviteBox.innerHTML = `
-        <div class="warn">
-          Kandidat trenutno <b>ne prelazi prag</b> (${threshold}).<br/>
-          Preporuka: edukacija / razgovor bez pritiska prije bilo kakve odluke.
-        </div>
-      `;
+Invite link (ako kandidat želi): ${invite}
+${passed ? "" : "\nStatus: Kandidat trenutno ne prelazi bodovni prag – preporuka bez pritiska."}
+`);
     }
-  }
 
-  function resetAll(){
-    // reset radios
-    document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
-    // reset texts
-    ['q1_text','q2_text','q9_text','refName','refPhone','refEmail','refRelation'].forEach(id => {
-      const el = document.getElementById(id);
-      if(el) el.value = '';
+    async function copyResults(){
+      const text = mentorSummaryEl.innerText.trim();
+      if(!text) return alert("Nema sažetka za kopiranje.");
+      try{
+        await navigator.clipboard.writeText(text);
+        alert("Sažetak kopiran. Zalijepi u WhatsApp/Telegram/email.");
+      }catch(e){
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+        alert("Sažetak kopiran.");
+      }
+    }
+
+    function sendEmail(){
+      const to = safeText(mentorEmailEl.value);
+      if(!to) return alert("Nije upisan email mentora.");
+      const body = mentorSummaryEl.innerText.trim();
+      if(!body) return alert("Nema sažetka za slanje.");
+
+      const subject = "Novalus Prime – sažetak upitnika";
+      const mailto = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      window.location.href = mailto;
+    }
+
+    function sendWhatsApp(){
+      let phone = safeText(mentorPhoneEl.value).replace(/[^\d+]/g,"");
+      if(!phone) return alert("Nije upisan telefon mentora.");
+      const text = mentorSummaryEl.innerText.trim();
+      if(!text) return alert("Nema sažetka za slanje.");
+
+      const waPhone = phone.replace(/^\+/, "");
+      const url = `https://wa.me/${waPhone}?text=${encodeURIComponent(text)}`;
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
+
+    function sendTelegram(){
+      const text = mentorSummaryEl.innerText.trim();
+      if(!text) return alert("Nema sažetka za slanje.");
+      const url = `https://t.me/share/url?text=${encodeURIComponent(text)}`;
+      window.open(url, "_blank", "noopener,noreferrer");
+    }
+
+    quizForm.addEventListener("submit", (e)=>{
+      e.preventDefault();
+
+      const score = calcScore();
+      const r = getRange(score);
+      const passed = score >= PASS_THRESHOLD;
+
+      setInviteUI();
+
+      scoreLine.textContent = `Ukupno bodova: ${score}`;
+      rangeLine.textContent = `${r.label} – ${r.rec}`;
+      passLine.textContent  = passed
+        ? `Kandidat zadovoljava bodovni prag (${PASS_THRESHOLD}). Ako želi, može se uključiti preko mentor linka.`
+        : `Kandidat NE prelazi bodovni prag (${PASS_THRESHOLD}). Preporuka: edukacija i bez pritiska.`;
+
+      mentorSummaryEl.textContent = makeSummary(score);
+      resultCard.style.display = "block";
+      statusPill.textContent = passed ? "Kandidat prolazi prag" : "Kandidat ne prolazi prag";
+
+      paintShareButtons(score);
+
+      // scroll do rezultata
+      resultCard.scrollIntoView({ behavior: "smooth", block: "start" });
     });
-    const rg = document.getElementById('refGender');
-    if(rg) rg.value = '';
-    refBox.style.display = 'none';
-    msgEl.innerHTML = '';
-    resultArea.style.display = 'none';
-  }
 
-  calcBtn.addEventListener('click', () => {
-    msgEl.innerHTML = '';
-    const mentorId = mustHaveMentorId();
-    if(!mentorId) return;
+    btnReset.addEventListener("click", ()=>{
+      quizForm.reset();
+      resultCard.style.display = "none";
+      statusPill.textContent = "Spreman za ispunjavanje";
+      setInviteUI();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
 
-    const { total, missing } = sumScore();
-    if(missing.length){
-      showMsg(`Nedostaju odgovori na bodovana pitanja: ${missing.join(', ')}.`, 'warn');
-      resultArea.style.display = 'none';
-      return;
-    }
+    btnCopy.addEventListener("click", copyResults);
+    btnEmail.addEventListener("click", sendEmail);
+    btnWA.addEventListener("click", sendWhatsApp);
+    btnTG.addEventListener("click", sendTelegram);
 
-    const interp = interpretScore(total);
-    scoreLine.textContent = `Ukupno bodova: ${total}`;
-    levelLine.innerHTML = `<div class="ok"><b>${escapeHtml(interp.label)}</b><br/>${escapeHtml(interp.note)}</div>`;
-
-    setInviteVisibility(mentorId, total);
-
-    const summary = buildSummary(mentorId, total, interp);
-    resultText.textContent = summary;
-
-    resultArea.style.display = 'block';
-
-    // Prepare email and sms buttons
-    const mentorEmail = (mentorEmailEl.value || '').trim();
-    emailBtn.disabled = !mentorEmail;
-    emailBtn.title = mentorEmail ? '' : 'Upišite mentor email na vrhu da bi se email pripremio.';
-    emailBtn.style.opacity = mentorEmail ? '1' : '0.5';
-
-    const mentorPhone = (mentorPhoneEl.value || '').trim();
-    smsBtn.disabled = !mentorPhone;
-    smsBtn.title = mentorPhone ? '' : 'Upišite mentor mobitel na vrhu da bi se SMS pripremio.';
-    smsBtn.style.opacity = mentorPhone ? '1' : '0.5';
-
-    showMsg('Rezultat je izračunat. Možete kopirati ili poslati sažetak.', 'ok');
-  });
-
-  copyBtn.addEventListener('click', async () => {
-    try {
-      await navigator.clipboard.writeText(resultText.textContent);
-      showMsg('Kopirano u clipboard. Zalijepi u WhatsApp ili poruku mentoru.', 'ok');
-    } catch (e){
-      showMsg('Ne mogu kopirati automatski (ograničenje preglednika). Označi tekst i kopiraj ručno.', 'warn');
-    }
-  });
-
-  emailBtn.addEventListener('click', () => {
-    const email = (mentorEmailEl.value || '').trim();
-    if(!email) return;
-    const subject = encodeURIComponent('Novalus Prime – rezultat upitnika');
-    const body = encodeURIComponent(resultText.textContent);
-    window.location.href = `mailto:${encodeURIComponent(email)}?subject=${subject}&body=${body}`;
-  });
-
-  smsBtn.addEventListener('click', () => {
-    const phone = (mentorPhoneEl.value || '').trim();
-    if(!phone) return;
-    const body = encodeURIComponent(resultText.textContent);
-    // Some devices use sms:+number?body= ; others sms:+number&body=
-    window.location.href = `sms:${encodeURIComponent(phone)}?body=${body}`;
-  });
-
-  resetBtn.addEventListener('click', resetAll);
-
-  // UX: keep mentorId numeric
-  mentorIdEl.addEventListener('input', () => {
-    mentorIdEl.value = sanitizeId(mentorIdEl.value);
-  });
-
-})();
-</script>
+    // init
+    setInviteUI();
+  </script>
 </body>
 </html>
