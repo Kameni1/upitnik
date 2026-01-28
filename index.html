@@ -927,6 +927,7 @@
     const quizForm = document.getElementById("quizForm");
 // reagiraj na klik bilo kojeg radio botuna
 quizForm.addEventListener("change", (e) => {
+ 
   if (e.target && e.target.type === "radio") {
     updatePoints();
     updateLiveScore();
@@ -934,6 +935,17 @@ quizForm.addEventListener("change", (e) => {
 });
    
     const resultCard = document.getElementById("resultCard");
+    quizForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  resultCard.style.display = "block";
+
+  resultCard.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+});
+
     const mentorSummaryEl = document.getElementById("mentorSummary");
     const statusPill = document.getElementById("statusPill");
     const statusText = document.getElementById("statusText");
