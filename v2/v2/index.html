@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="hr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Upitnik kompatibilnosti</title>
+  <style>
+    :root{
+      --bg1:#07121f; --bg2:#0b2440;
+      --gold1:#f7e7a0; --gold2:#c9a227;
+      --card: rgba(255,255,255,.06);
+      --stroke: rgba(255,255,255,.14);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.70);
+      --good:#6ee7b7; --warn:#fde68a; --bad:#fb7185;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; color:var(--text);
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Arial,sans-serif;
+      background: radial-gradient(1200px 700px at 20% 10%, rgba(201,162,39,.25), transparent 55%),
+                  radial-gradient(900px 600px at 80% 20%, rgba(247,231,160,.12), transparent 50%),
+                  linear-gradient(160deg, var(--bg1), var(--bg2));
+      min-height:100vh;
+      display:flex; align-items:center; justify-content:center;
+      padding:22px;
+    }
+    .wrap{max-width:860px; width:100%}
+    .hero{
+      border:1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+      border-radius:24px;
+      padding:22px 22px 18px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.35);
+      position:relative;
+      overflow:hidden;
+    }
+    .hero:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background: radial-gradient(700px 220px at 50% 0%, rgba(201,162,39,.35), transparent 60%);
+      pointer-events:none;
+    }
+    h1{margin:0 0 6px; font-size:28px; letter-spacing:.2px}
+    .sub{margin:0; color:var(--muted); line-height:1.35}
+    .grid{display:grid; grid-template-columns:1fr; gap:14px; margin-top:16px}
+    @media (min-width:860px){ .grid{grid-template-columns:1.2fr .8fr} }
+    .card{
+      border:1px solid var(--stroke);
+      background: var(--card);
+      border-radius:20px;
+      padding:16px;
+      backdrop-filter: blur(8px);
+    }
+    .row{display:grid; gap:10px}
+    .row2{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+    label{font-size:13px; color:var(--muted)}
+    input, select, textarea{
+      width:100%;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.20);
+      color:var(--text);
+      padding:12px 12px;
+      outline:none;
+    }
+    textarea{min-height:84px; resize:vertical}
+    .q{
+      padding:12px; border-radius:16px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      margin-bottom:10px;
+    }
+    .q strong{display:block; margin-bottom:8px}
+    .opts{display:flex; gap:10px; flex-wrap:wrap}
+    .chip{
+      display:flex; align-items:center; gap:8px;
+      padding:10px 12px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+      cursor:pointer;
+      user-select:none;
+    }
+    .chip input{width:auto}
+    .btns{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px}
+    button{
+      border:0; border-radius:16px;
+      padding:12px 14px;
+      font-weight:700;
+      cursor:pointer;
+    }
+    .primary{
+      background: linear-gradient(135deg, var(--gold1), var(--gold2));
+      color:#1a1405;
+      box-shadow: 0 14px 28px rgba(201,162,39,.25);
+    }
+    .ghost{
+      background: rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.16);
+      color:var(--text);
+    }
+    .result{
+      padding:14px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.22);
+      margin-top:10px;
+    }
+    .meter{
+      height:12px; border-radius:999px;
+      background: rgba(255,255,255,.10);
+      overflow:hidden; margin:10px 0 6px;
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .fill{height:100%; width:0%}
+    .small{font-size:12px; color:var(--muted); line-height:1.35}
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+      font-weight:700;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <h1>Upitnik kompatibilnosti (2 minute)</h1>
+      <p class="sub">Atraktivan upitnik za prvi filter: spremnost, ciljevi i disciplina. Na kraju dobiješ rezultat i poruku za slanje mentoru.</p>
+
+      <div class="grid">
+        <div class="card">
+          <div class="row2">
+            <div>
+              <label>Ime i prezime</label>
+              <input id="ime" placeholder="npr. Ivan Horvat">
+            </div>
+            <div>
+              <label>Kontakt (mob / email)</label>
+              <input id="kontakt" placeholder="npr. +385... ili email">
+            </div>
+          </div>
+
+          <div class="row2" style="margin-top:10px">
+            <div>
+              <label>Mentor ID (tvoj kod)</label>
+              <input id="mentor" placeholder="npr. BRUNO-01">
+            </div>
+            <div>
+              <label>Koliko brzo želi rezultat?</label>
+              <select id="hitno">
+                <option value="2">Odmah (u 30 dana)</option>
+                <option value="1">Realno (3-6 mjeseci)</option>
+                <option value="0">Polako (bez žurbe)</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="margin-top:12px">
+            <div class="q" data-points="3">
+              <strong>1) Možeš li 30 minuta dnevno odvojiti 90 dana zaredom?</strong>
+              <div class="opts">
+                <label class="chip"><input type="radio" name="q1" value="3"> Da, bez problema</label>
+                <label class="chip"><input type="radio" name="q1" value="2"> Većinom da</label>
+                <label class="chip"><input type="radio" name="q1" value="1"> Teško</label>
+                <label class="chip"><input type="radio" name="q1" value="0"> Ne</label>
+              </div>
+            </div>
+
+            <div class="q" data-points="3">
+              <strong>2) Kako gledaš na učenje (video + kratke bilješke)?</strong>
+              <div class="opts">
+                <label class="chip"><input type="radio" name="q2" value="3"> Volim učiti i primijeniti</label>
+                <label class="chip"><input type="radio" name="q2" value="2"> Učim kad imam plan</label>
+                <label class="chip"><input type="radio" name="q2" value="1"> Slabo mi ide</label>
+                <label class="chip"><input type="radio" name="q2" value="0"> Ne želim učiti</label>
+              </div>
+            </div>
+
+            <div class="q" data-points="3">
+              <strong>3) Jesi li spreman raditi s ljudima bez pritiska (nenametljivo)?</strong>
+              <div class="opts">
+                <label class="chip"><input type="radio" name="q3" value="3"> Da</label>
+                <label class="chip"><input type="radio" name="q3" value="2"> Uz pomoć mentora</label>
+                <label class="chip"><input type="radio" name="q3" value="1"> Ne volim baš</label>
+                <label class="chip"><input type="radio" name="q3" value="0"> Ne</label>
+              </div>
+            </div>
+
+            <div class="q" data-points="3">
+              <strong>4) Koji je tvoj glavni motiv?</strong>
+              <div class="opts">
+                <label class="chip"><input type="radio" name="q4" value="3"> Dodatni prihod + rast vještina</label>
+                <label class="chip"><input type="radio" name="q4" value="2"> Samo dodatni prihod</label>
+                <label class="chip"><input type="radio" name="q4" value="1"> Znatiželja</label>
+                <label class="chip"><input type="radio" name="q4" value="0"> Ne znam</label>
+              </div>
+            </div>
+
+            <div class="q" data-points="3">
+              <strong>5) Koliko si uporan kad nešto ne ide odmah?</strong>
+              <div class="opts">
+                <label class="chip"><input type="radio" name="q5" value="3"> Idem do kraja</label>
+                <label class="chip"><input type="radio" name="q5" value="2"> Ostanem još neko vrijeme</label>
+                <label class="chip"><input type="radio" name="q5" value="1"> Lako odustanem</label>
+                <label class="chip"><input type="radio" name="q5" value="0"> Odustanem odmah</label>
+              </div>
+            </div>
+
+            <label>6) Kratko: što želiš postići u idućih 6 mjeseci?</label>
+            <textarea id="cilj" placeholder="Npr. 300€ dodatno mjesečno, više discipline, bolja financijska rutina..."></textarea>
+          </div>
+
+          <div class="btns">
+            <button class="primary" onclick="izracunaj()">Izračunaj rezultat</button>
+            <button class="ghost" onclick="resetAll()">Reset</button>
+            <button class="ghost" onclick="copySummary()">Kopiraj poruku mentoru</button>
+          </div>
+
+          <div id="out" class="result" style="display:none">
+            <div style="display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; align-items:center">
+              <span class="badge" id="badge">Rezultat</span>
+              <span class="small" id="scoreTxt"></span>
+            </div>
+            <div class="meter"><div class="fill" id="fill"></div></div>
+            <div id="msg" class="small"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="badge">Kako to radi?</div>
+          <p class="small" style="margin-top:10px">
+            1) Popuniš pitanja. <br>
+            2) Klikneš “Izračunaj rezultat”. <br>
+            3) Klikneš “Kopiraj poruku mentoru” i pošalješ mi na Telegram/WhatsApp.
+          </p>
+          <p class="small">
+            Ako želiš, dodam: ✅ obavezno polje, ✅ automatsko slanje na e-mail, ✅ QR kod, ✅ spremanje u Google Sheet.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  function valOf(name){
+    const el = document.querySelector('input[name="'+name+'"]:checked');
+    return el ? parseInt(el.value,10) : null;
+  }
+
+  function izracunaj(){
+    const qs = ["q1","q2","q3","q4","q5"];
+    let score = 0;
+    let answered = 0;
+    for(const q of qs){
+      const v = valOf(q);
+      if(v!==null){ score += v; answered++; }
+    }
+    const max = 15;
+    const pct = Math.round((score/max)*100);
+
+    const out = document.getElementById("out");
+    const fill = document.getElementById("fill");
+    const badge = document.getElementById("badge");
+    const scoreTxt = document.getElementById("scoreTxt");
+    const msg = document.getElementById("msg");
+
+    out.style.display = "block";
+    fill.style.width = pct + "%";
+
+    let label, hint, color;
+    if(pct >= 80){ label="VISOKA KOMPATIBILNOST"; hint="Spreman si za konkretan plan i 90-dnevnu kampanju."; color="var(--good)"; }
+    else if(pct >= 55){ label="SREDNJA KOMPATIBILNOST"; hint="Ima potencijala, treba ti jasna rutina i podrška mentora."; color="var(--warn)"; }
+    else { label="NISKA KOMPATIBILNOST"; hint="Za sada je bolje krenuti s edukacijom i malim koracima bez pritiska."; color="var(--bad)"; }
+
+    badge.textContent = label;
+    badge.style.borderColor = color;
+    badge.style.color = color;
+
+    scoreTxt.textContent = `Bodovi: ${score}/${max} • Popunjeno: ${answered}/${qs.length}`;
+    msg.textContent = hint;
+  }
+
+  function resetAll(){
+    document.getElementById("ime").value="";
+    document.getElementById("kontakt").value="";
+    document.getElementById("mentor").value="";
+    document.getElementById("cilj").value="";
+    document.getElementById("hitno").value="2";
+    document.querySelectorAll('input[type="radio"]').forEach(r => r.checked=false);
+    document.getElementById("out").style.display="none";
+    document.getElementById("fill").style.width="0%";
+  }
+
+  function copySummary(){
+    const ime = document.getElementById("ime").value.trim();
+    const kontakt = document.getElementById("kontakt").value.trim();
+    const mentor = document.getElementById("mentor").value.trim();
+    const cilj = document.getElementById("cilj").value.trim();
+    const hitno = document.getElementById("hitno").selectedOptions[0].text;
+
+    const qs = ["q1","q2","q3","q4","q5"];
+    let score=0; let answered=0;
+    for(const q of qs){
+      const v = valOf(q);
+      if(v!==null){ score+=v; answered++; }
+    }
+    const max=15;
+    const pct = Math.round((score/max)*100);
+
+    const text =
+`UPITNIK (sažetak)
+Ime: ${ime || "-"}
+Kontakt: ${kontakt || "-"}
+Mentor ID: ${mentor || "-"}
+Hitnost: ${hitno}
+Rezultat: ${score}/${max} (${pct}%)
+Cilj 6 mj: ${cilj || "-"}`;
+
+    navigator.clipboard.writeText(text).then(()=>{
+      alert("Poruka kopirana. Zalijepi u Telegram/WhatsApp mentoru.");
+    }).catch(()=>{
+      alert("Ne mogu kopirati automatski. Označi tekst ručno (Ctrl+C).");
+      console.log(text);
+    });
+  }
+</script>
+</body>
+</html>
