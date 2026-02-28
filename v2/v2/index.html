@@ -308,15 +308,40 @@
     }
     const max=15;
     const pct = Math.round((score/max)*100);
+const qText = (name) => {
+  const el = document.querySelector(`input[name="${name}"]:checked`);
+  if (!el) return "-";
+  const lbl = el.closest("label");
+  return (lbl ? lbl.innerText : el.value).replace(/\s+/g, " ").trim();
+};
 
-    const text =
-`UPITNIK (sažetak)
+const text =
+`UPITNIK (DETALJNO)
+
 Ime: ${ime || "-"}
 Kontakt: ${kontakt || "-"}
 Mentor ID: ${mentor || "-"}
 Hitnost: ${hitno}
-Rezultat: ${score}/${max} (${pct}%)
-Cilj 6 mj: ${cilj || "-"}`;
+
+1) Možeš li 30 min dnevno odvojiti 90 dana zaredom?
+Odgovor: ${qText("q1")}
+
+2) Kako gledaš na učenje (video + kratke bilješke)?
+Odgovor: ${qText("q2")}
+
+3) Jesi li spreman raditi s ljudima bez pritiska (nenametljivo)?
+Odgovor: ${qText("q3")}
+
+4) Koji je tvoj glavni motiv?
+Odgovor: ${qText("q4")}
+
+5) Koliko si uporan kad nešto ne ide odmah?
+Odgovor: ${qText("q5")}
+
+Cilj 6 mj:
+${cilj || "-"}
+
+Rezultat: ${score}/${max} (${pct}%)`;
 
     navigator.clipboard.writeText(text).then(()=>{
       alert("Poruka kopirana. Zalijepi u Telegram/WhatsApp mentoru.");
