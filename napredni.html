@@ -2,182 +2,147 @@
 <html lang="hr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MLM KVIZ – NAPREDNI (50 pitanja)</title>
+
 <style>
-body{font-family:Arial;background:#f3f4f6;margin:0}
-.container{max-width:900px;margin:20px auto;background:#fff;padding:20px;border-radius:16px}
-.question{margin-bottom:20px;padding:15px;border:1px solid #ddd;border-radius:12px}
-.option{display:block;padding:10px;margin:6px 0;border-radius:8px;cursor:pointer;border:1px solid #ccc}
-.correct{background:#bbf7d0}
-.good{background:#fef08a}
-.ok{background:#fdba74}
-.bad{background:#fecaca}
-button{padding:12px 18px;margin-top:20px;border:none;border-radius:10px;background:#2563eb;color:white;font-weight:bold;cursor:pointer}
-.score{font-size:20px;font-weight:bold;margin-top:20px}
+body{font-family:Arial;background:#f4f6f8;margin:0}
+.container{max-width:900px;margin:20px auto;background:#fff;padding:20px;border-radius:15px}
+.question{margin-bottom:20px;padding:15px;border:1px solid #ddd;border-radius:10px}
+.option{display:block;padding:10px;margin:5px 0;border-radius:8px;cursor:pointer;border:1px solid #ccc}
+.best{background:#b7f7b0}
+.good{background:#fff3a0}
+.ok{background:#ffd59e}
+.bad{background:#f7b0b0}
+button{padding:12px 20px;margin-top:20px;background:#2563eb;color:white;border:none;border-radius:10px;font-weight:bold}
+.score{font-size:22px;margin-top:20px;font-weight:bold}
 </style>
+
 </head>
 <body>
+
 <div class="container">
 <h1>MLM KVIZ – NAPREDNI GRADITELJI (50 pitanja)</h1>
+
 <form id="quiz"></form>
+
 <button onclick="calculate()">Izračunaj bodove</button>
-<div id="result" class="score"></div>
+<div class="score" id="score"></div>
+
 </div>
+
 <script>
 
-function Q(q, a){return {q:q, a:a};}
-function A(t,p){return {t:t,p:p};}
-
-const questions=[
-Q("Koja je dugoročna svrha MLM poslovanja?",[
-A("Izgradnja stabilne mreže i odnosa",5),
-A("Stvaranje dodatnog prihoda",4),
-A("Brza zarada",2),
-A("Slučajni uspjeh",0)
-]),
-
-Q("Zašto je važna periodična kupovina?",[
-A("Stabilnost sustava i mreže",5),
-A("Osobna aktivnost",4),
-A("Jer treba",2),
-A("Bez razloga",0)
-]),
-
-Q("Što je ključ povjerenja u sustav?",[
-A("Dosljedni rezultati i transparentnost",5),
-A("Dobra prezentacija",3),
-A("Entuzijazam",2),
-A("Pretjerivanje",0)
-]),
-
-Q("Kako nastaje prava motivacija?",[
-A("Rezultati strukture",5),
-A("Mentor motivira",3),
-A("Govori",2),
-A("Pritisak",0)
-]),
-
-Q("Koliko direktnih linija treba razviti novi član?",[
-A("2-5 kvalitetnih",5),
-A("1-2",3),
-A("Nasumično",2),
-A("Nijednu",0)
-]),
-
-Q("Zašto je važan rad u dubinu?",[
-A("Stabilnost mreže",5),
-A("Motivacija",3),
-A("Aktivnost",2),
-A("Nije važno",0)
-]),
-
-Q("Što znači 90 dana kampanja?",[
-A("Fokusirana intenzivna akcija",5),
-A("Motivacija",3),
-A("Povremeni rad",2),
-A("Odmor",0)
-]),
-
-Q("Kako koristiti preporuke?",[
-A("Korektno i strateški",5),
-A("Često",3),
-A("Nasumično",2),
-A("Nikako",0)
-]),
-
-Q("Koliko traje prvi kontakt?",[
-A("Kratko, ispod minute",5),
-A("Par minuta",3),
-A("Dugo objašnjavanje",1),
-A("Sat vremena",0)
-]),
-
-Q("Što odmah raditi s novim članom?",[
-A("Uzeti kontakte i raditi",5),
-A("Motivirati",3),
-A("Čekati",2),
-A("Ništa",0)
-]),
-
-Q("Kako graditi odnos?",[
-A("Dugoročno i pošteno",5),
-A("Korektno",3),
-A("Povremeno",2),
-A("Po potrebi",0)
-]),
-
-Q("Zašto je važna lista kontakata?",[
-A("Osnova rasta posla",5),
-A("Pomaže radu",3),
-A("Formalnost",2),
-A("Ne treba",0)
-]),
-
-Q("Što znači rad preko preporuka?",[
-A("Širenje kroz mrežu povjerenja",5),
-A("Brži kontakt",3),
-A("Lakši razgovor",2),
-A("Bez smisla",0)
-]),
-
-Q("Zašto ne forsirati poznanike?",[
-A("Jer posao dolazi kroz nove ljude",5),
-A("Da ne smetamo",3),
-A("Jer nije potrebno",2),
-A("Jer nema smisla",0)
-]),
-
-Q("Koja je ključna deviza?",[
-A("Milijun dolazi od ljudi koje još ne poznaješ",5),
-A("Ljudi koje znaš",3),
-A("Prijatelji",2),
-A("Nitko",0)
-]),
-
-// GENERIRAMO JOŠ PITANJA AUTOMATSKI DO 50
+let pitanja = [
+"Koji je pravi cilj prvog kontakta?",
+"Koliko dugo treba trajati prvi poziv?",
+"Što je važnije od motivacije mentora?",
+"Što je ključ stabilnosti MLM mreže?",
+"Kako se gradi dugoročni uspjeh?",
+"Što je važnije: prodaja ili struktura?",
+"Koji je pravi odnos prema poznanicima?",
+"Kako nastaje pravi momentum?",
+"Što raditi s novim suradnikom prvi dan?",
+"Koliko direktnih treba razviti novi član?",
+"Koliko duboko treba raditi?",
+"Što raditi kad član stagnira?",
+"Koja je uloga 90-dnevne kampanje?",
+"Što znači povjerenje u sustav?",
+"Kako se razvija lider?",
+"Što raditi s negativnim ljudima?",
+"Koja je najveća greška početnika?",
+"Kako graditi listu kontakata?",
+"Kako koristiti preporuke?",
+"Što raditi kad netko kaže 'nemam vremena'?",
+"Što je pravi cilj prezentacije?",
+"Što raditi nakon prezentacije?",
+"Kako održavati tim?",
+"Što je važnije: brzina ili stabilnost?",
+"Kako se gradi autoritet?",
+"Što je pravi mindset lidera?",
+"Kako se razvija lojalnost?",
+"Kako reagirati na odbijanje?",
+"Kako se gradi dubina mreže?",
+"Što znači rad u 3. i 4. nivou?",
+"Kako održati energiju tima?",
+"Što raditi kad padne motivacija?",
+"Što znači raditi pametno?",
+"Kako graditi povjerenje?",
+"Kako izbjeći burnout?",
+"Kako razviti samostalne lidere?",
+"Što raditi kad netko odustane?",
+"Kako razviti disciplinu?",
+"Kako povećati produkciju?",
+"Kako se postaje top lider?",
+"Što je najvažnije u komunikaciji?",
+"Kako razviti masovnost?",
+"Kako razviti sistem?",
+"Kako prepoznati potencijal?",
+"Što raditi s neaktivnim članovima?",
+"Kako graditi brend?",
+"Kako razviti konstantu?",
+"Što znači dugoročno razmišljanje?",
+"Kako razviti liderstvo u drugima?",
+"Što razlikuje amatere od profesionalaca?"
 ];
 
-while(questions.length<50){
-questions.push(Q("Napredno pitanje MLM logike #"+(questions.length+1),[
-A("Strateški ispravan odgovor",5),
-A("Dobar odgovor",3),
-A("Slabiji odgovor",2),
-A("Loš odgovor",0)
-]));
-}
+let odgovori = [
+["Prodati odmah",1,"Zainteresirati i završiti poziv",4,"Objasniti sve detalje",2,"Pričati dugo",0],
+["15 minuta",1,"Ispod 1 minute",4,"10 minuta",2,"Koliko treba",0],
+["Motivacijski govor",1,"Rad strukture",4,"Bonus plan",2,"Sreća",0],
+["Brza zarada",1,"Periodična aktivnost",4,"Jednokratni rad",2,"Marketing",0],
+["Brzi rezultati",1,"Konzistentan rad",4,"Slučajnost",0,"Sreća",0],
+["Prodaja",1,"Struktura",4,"Marketing",2,"Cijena",0],
+["Uvjeravati ih",0,"Tražiti preporuke",4,"Forsirati",0,"Ignorirati",1],
+["Govori mentora",0,"Rad ljudi u mreži",4,"Bonus",1,"Sreća",0],
+["Objasniti sve",1,"Uzeti kontakte",4,"Čekati",0,"Motivirati",2],
+["1 osoba",1,"2-5 ljudi",4,"10 ljudi",2,"0",0],
+["Samo prve",1,"3-4 nivoa",4,"Samo direktne",2,"Ništa",0],
+["Gurati ga",1,"Raditi s njegovom mrežom",4,"Ignorirati",0,"Motivirati",2],
+["Nevažno",0,"Ključna",4,"Povremena",2,"Opcionalna",1],
+["Sumnjati",0,"Vjerovati i raditi",4,"Čekati",1,"Analizirati",2],
+["Sam od sebe",0,"Kroz rad i iskustvo",4,"Tečajem",2,"Srećom",0],
+["Izbjegavati",1,"Filtrirati",4,"Slušati sve",0,"Uvjerenja",2],
+["Odustajanje",4,"Pogrešni ljudi",2,"Loš proizvod",1,"Ništa",0],
+["Ne raditi",0,"Stalno širiti",4,"Čekati",1,"Kupovati",0],
+["Ne koristiti",0,"Fokus na preporuke",4,"Forsirati",1,"Ignorirati",0],
+["Objašnjavati",0,"Dogovoriti prezentaciju",4,"Ignorirati",1,"Prodavati",0]
+];
 
-const quiz=document.getElementById("quiz");
-questions.forEach((q,i)=>{
+function render(){
+let form=document.getElementById("quiz");
+
+pitanja.forEach((p,i)=>{
 let div=document.createElement("div");
 div.className="question";
-div.innerHTML="<b>"+(i+1)+". "+q.q+"</b>";
-q.a.forEach((o,j)=>{
-let label=document.createElement("label");
-label.className="option";
-let input=document.createElement("input");
-input.type="radio";
-input.name="q"+i;
-input.value=j;
-input.onclick=()=>{
-label.classList.add(o.p==5?"correct":o.p>=3?"good":o.p>=2?"ok":"bad");
-};
-label.appendChild(input);
-label.appendChild(document.createTextNode(o.t));
-div.appendChild(label);
-});
-quiz.appendChild(div);
-});
 
-function calculate(){
-let score=0;
-questions.forEach((q,i)=>{
-let sel=document.querySelector('input[name="q'+i+'"]:checked');
-if(sel){score+=q.a[sel.value].p;}
-});
-document.getElementById("result").innerText="Ukupno bodova: "+score;
+let html="<b>"+(i+1)+". "+p+"</b>";
+
+for(let j=0;j<odgovori[i].length;j+=2){
+let text=odgovori[i][j];
+let val=odgovori[i][j+1];
+
+html+=`<label class="option">
+<input type="checkbox" value="${val}"> ${text}
+</label>`;
 }
 
+div.innerHTML=html;
+form.appendChild(div);
+});
+}
+
+function calculate(){
+let total=0;
+document.querySelectorAll("input:checked").forEach(el=>{
+total+=parseInt(el.value);
+});
+
+document.getElementById("score").innerText="Rezultat: "+total+" bodova";
+}
+
+render();
+
 </script>
+
 </body>
 </html>
